@@ -1,0 +1,31 @@
+<project name="MyProject" basedir="." default="jar">
+    <!-- Define directories for convenience -->
+    <property name="src.dir" value="codegen_java"/>
+    <property name="classes.dir" value="classes"/>
+    <property name="lib.dir" location="lib" />
+    <property name="dist.dir" value="dist"/>
+    <property name="jar.name" value="encoding_classes.jar"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+
+    <!-- Clean task -->
+    <target name="clean">
+        <delete dir="${classes.dir}"/>
+    </target>
+
+    <!-- Compile task -->
+    <target name="compile" depends="clean">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" source="17" target="17" debuglevel="${debuglevel}" includeantruntime="false">
+            <classpath>
+                <pathelement path="${dist.dir}/hla_1516e_encoding.jar"/>
+                <pathelement path="C:\Users\harla\rtis_D39\lib\win64_vc++-14.0\rtis1516e.jar"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <!-- Jar task -->
+    <target name="jar" depends="compile">
+        <mkdir dir="${dist.dir}"/>
+        <jar destfile="${dist.dir}/${jar.name}" basedir="${classes.dir}"/>
+    </target>
+</project>
