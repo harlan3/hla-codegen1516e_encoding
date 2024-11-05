@@ -144,7 +144,13 @@ public class NullTerminatedGenerator {
 		System.out.println(indentFormat + "// Class Variable");
 		System.out.println(indentFormat + "private byte[] value;");
 		System.out.println();
-		
+		System.out.println(indentFormat + "public int sizeOfValue() {");
+		System.out.println();
+		depthIncSpace();
+		System.out.println(indentFormat + "return value.length;");
+		depthDecSpace();
+		System.out.println(indentFormat + "}");
+		System.out.println();
 		System.out.println(indentFormat + "// Setter");
 		System.out.println(indentFormat + "public void setValue(byte[] value) {");
 		depthIncSpace();

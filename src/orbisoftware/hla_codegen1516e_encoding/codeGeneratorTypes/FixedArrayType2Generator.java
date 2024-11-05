@@ -137,6 +137,14 @@ public class FixedArrayType2Generator {
 		System.out.println();
 		System.out.println(indentFormat + "private " + nativeClass + "[] internalClassRepresentation = new " + 
 				nativeClass + "[" + ledgerEntry.entryCardinality + "];");
+		System.out.println();
+		System.out.println(indentFormat + "public int sizeOfValue() {");
+		System.out.println();
+		depthIncSpace();
+		System.out.println(indentFormat + "return " + ledgerEntry.entryCardinality + ";");
+		depthDecSpace();
+		System.out.println(indentFormat + "}");
+		System.out.println();
 		System.out.println(indentFormat + "public int cardinality = " + ledgerEntry.entryCardinality + ";");
 		System.out.println();
 		System.out.println(indentFormat + "// Constructor");

@@ -147,7 +147,13 @@ public class LengthlessType2Generator {
 		System.out.println(indentFormat + "private ArrayList<" + nativeClass +
 				"> internalClassRepresentation = new ArrayList<" + nativeClass + ">();");
 		System.out.println();
-		
+		System.out.println(indentFormat + "public int sizeOfValue() {");
+		System.out.println();
+		depthIncSpace();
+		System.out.println(indentFormat + "return internalClassRepresentation.size();");
+		depthDecSpace();
+		System.out.println(indentFormat + "}");
+		System.out.println();
 		System.out.println(indentFormat + "// Setter");
 		System.out.println(indentFormat + "public void set" + nativeClass + "(int index, " +
 				nativeClass + " " + variableName + ") {");

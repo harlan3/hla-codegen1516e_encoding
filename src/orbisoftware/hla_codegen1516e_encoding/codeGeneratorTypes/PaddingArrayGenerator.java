@@ -149,7 +149,13 @@ public class PaddingArrayGenerator {
 		System.out.println(indentFormat + "private ArrayList<" + primitiveClass +
 				"> internalClassRepresentation = new ArrayList<" + primitiveClass + ">();");
 		System.out.println();
-		
+		System.out.println(indentFormat + "public int sizeOfValue() {");
+		System.out.println();
+		depthIncSpace();
+		System.out.println(indentFormat + "return internalClassRepresentation.size();");
+		depthDecSpace();
+		System.out.println(indentFormat + "}");
+		System.out.println();
 		System.out.println(indentFormat + "// Setter");
 		System.out.println(indentFormat + "public void set" + primitiveClass + "(int index, " +
 				primitiveClass + " " + variableName + ") {");
