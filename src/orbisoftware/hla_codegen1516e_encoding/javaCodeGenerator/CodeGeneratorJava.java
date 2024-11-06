@@ -804,7 +804,7 @@ public class CodeGeneratorJava {
 				System.out.println();
 				System.out.println("   private Utilities utilities = new Utilities();");
 				System.out.println();
-				System.out.println("   private ObjectClassHandle objectHandle;");
+				System.out.println("   public ObjectClassHandle objectHandle;");
 				System.out.println("   private int numberAttributes;");
 				System.out.println();
 
@@ -971,7 +971,7 @@ public class CodeGeneratorJava {
 				System.out.println();
 				System.out.println("   private Utilities utilities = new Utilities();");
 				System.out.println();
-				System.out.println("   private InteractionClassHandle interactionHandle;");
+				System.out.println("   public InteractionClassHandle interactionHandle;");
 				System.out.println("   private int numberParameters;");
 				System.out.println();
 
