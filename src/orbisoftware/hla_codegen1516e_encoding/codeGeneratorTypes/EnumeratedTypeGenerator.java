@@ -114,7 +114,7 @@ public class EnumeratedTypeGenerator {
 				System.out.println();
 				
 				String internalValue = utils.getPrimitiveFromEncodingType(utils.convertFromRPRType(var1.type));
-				System.out.println("   public " + internalValue + " internalValue = 0;");
+				System.out.println("   public " + internalValue + " value = 0;");
 				System.out.println();
 				
 				String enumeratorSelect = "Select * FROM EnumeratorDatatype WHERE parentObject = '" + var1.id + "'";
@@ -199,7 +199,7 @@ public class EnumeratedTypeGenerator {
 		
 		depthIncSpace();
 		System.out.println(indentFormat + "buffer.put(utilities.getBytesFrom" + 
-				utils.getClassFromPrimitive(internalValue) + "(internalValue));");
+				utils.getClassFromPrimitive(internalValue) + "(value));");
 		depthDecSpace();
 		depthDecSpace();
 		System.out.println(indentFormat + "}");
@@ -218,7 +218,7 @@ public class EnumeratedTypeGenerator {
 		System.out.println(indentFormat + "byte[] elementBytes = new byte[" + 
 				utils.getNumberBytesFromPrimitiveType(internalValue) + "];");
 		System.out.println(indentFormat + "buffer.get(elementBytes);");
-		System.out.println(indentFormat + "internalValue = utilities.get" + 
+		System.out.println(indentFormat + "value = utilities.get" + 
 				utils.getClassFromPrimitive(internalValue) + "FromBytes(elementBytes);");
 		
 		depthDecSpace();

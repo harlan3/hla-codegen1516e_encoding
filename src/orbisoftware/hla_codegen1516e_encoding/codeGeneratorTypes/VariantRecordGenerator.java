@@ -399,10 +399,10 @@ public class VariantRecordGenerator {
 
 				System.out.println(indentFormat + "// Align and write the " + classPrimitive + " field");
 				System.out.println(indentFormat + "utilities.insertPadding(buffer, bufferOffset, alignment);");
-				System.out.println(indentFormat + "buffer.put(utilities.getBytesFrom" + internalValue + "(" + ledgerEntry.entryDataField + ".internalValue));");
+				System.out.println(indentFormat + "buffer.put(utilities.getBytesFrom" + internalValue + "(" + ledgerEntry.entryDataField + ".value));");
 				System.out.println(indentFormat + "bufferOffset = buffer.position();");
 				System.out.println();
-				System.out.println(indentFormat + "switch (" + ledgerEntry.entryDataField + ".internalValue) {");
+				System.out.println(indentFormat + "switch (" + ledgerEntry.entryDataField + ".value) {");
 				
 				this.depthIncSpace();
 				
@@ -584,13 +584,13 @@ public class VariantRecordGenerator {
 				else
 					System.out.println(indentFormat + "bytes = new byte[" + internalValue + ".BYTES];");
 				System.out.println(indentFormat + "buffer.get(bytes);");
-				System.out.println(indentFormat + ledgerEntry.entryDataField + ".internalValue = utilities.get" + internalValue + "FromBytes(bytes);");
+				System.out.println(indentFormat + ledgerEntry.entryDataField + ".value = utilities.get" + internalValue + "FromBytes(bytes);");
 				if (internalValue.equals("Boolean"))
 					System.out.println(indentFormat + "bufferOffset += 1;");
 				else
 					System.out.println(indentFormat + "bufferOffset += " + internalValue + ".BYTES;");
 				System.out.println();
-				System.out.println(indentFormat + "switch (" + ledgerEntry.entryDataField + ".internalValue) {");
+				System.out.println(indentFormat + "switch (" + ledgerEntry.entryDataField + ".value) {");
 				
 				this.depthIncSpace();
 				
