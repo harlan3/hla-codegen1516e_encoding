@@ -297,7 +297,7 @@ public class CodeGeneratorJava {
 
 				System.out.println();
 				System.out.println(indentFormat + "// Class Variable");
-				System.out.println(indentFormat + "private " + nodeSplit[0] + " " + dataFieldName + ";");
+				System.out.println(indentFormat + "private " + nodeSplit[0] + " " + dataFieldName + " = new " + nodeSplit[0] + "();");
 				System.out.println();
 				
 				// Setter implementation
