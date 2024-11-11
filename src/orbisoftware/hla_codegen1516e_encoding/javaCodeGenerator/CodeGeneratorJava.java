@@ -486,6 +486,7 @@ public class CodeGeneratorJava {
 				
 				System.out.println(indentFormat + "dynamicBuffer.clear();");
 				System.out.println(indentFormat + "dynamicBuffer.put((byte []) mapEntry.getValue());");
+				System.out.println(indentFormat + "dynamicBuffer.flip();");
 				System.out.println(indentFormat + dataFieldName + ".decode(dynamicBuffer, " + dataFieldName + ".getAlignment());");
 				System.out.println(indentFormat + "break;");
 				System.out.println();
@@ -497,6 +498,7 @@ public class CodeGeneratorJava {
 				depthIncSpace(); 
 				System.out.println(indentFormat + "dynamicBuffer.clear();");
 				System.out.println(indentFormat + "dynamicBuffer.put((byte []) mapEntry.getValue());");
+				System.out.println(indentFormat + "dynamicBuffer.flip();");
 				System.out.println(indentFormat + dataFieldName + " = utilities.get" + classType + "FromBytes(dynamicBuffer.getWrittenBytes());");
 				System.out.println(indentFormat + "break;");
 				System.out.println();

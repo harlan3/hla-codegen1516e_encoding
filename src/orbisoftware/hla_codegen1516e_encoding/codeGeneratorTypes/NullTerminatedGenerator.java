@@ -190,28 +190,27 @@ public class NullTerminatedGenerator {
 		System.out.println();
 		
 		depthIncSpace();
-		System.out.println(indentFormat + "byte[] byteArray = buffer.getWrittenBytes();");
-		System.out.println(indentFormat + "int pos = 0;");
+		System.out.println(indentFormat + "int bufferOffset = utilities.align(buffer.position(), alignment);");
 		System.out.println(indentFormat + "int newSize = 0;");
 		System.out.println();
 		
-		System.out.println(indentFormat + "while (newSize < byteArray.length) {");
+		System.out.println(indentFormat + "while (newSize < buffer.limit()) {");
 		depthIncSpace();
 		System.out.println();
-		System.out.println(indentFormat + "if (byteArray[pos] == '\\0')");
+		System.out.println(indentFormat + "if (buffer.get() == '\\0')");
 		depthIncSpace();
 		System.out.println(indentFormat + "break;");
 		System.out.println();
 		depthDecSpace();
 		System.out.println(indentFormat + "newSize++;");
-		System.out.println(indentFormat + "pos++;");
 		depthDecSpace();
 		System.out.println(indentFormat + "}");
 		System.out.println();
 		
-		System.out.println(indentFormat + "byte[] newByteArray = Arrays.copyOf(byteArray, newSize + 1);");
-		System.out.println(indentFormat + "newByteArray[newSize] = 0x00;");
+		System.out.println(indentFormat + "byte[] newByteArray = new byte[(newSize + 1)];");
+		System.out.println(indentFormat + "buffer.position(bufferOffset);");
 		System.out.println();
+		System.out.println(indentFormat + "buffer.get(newByteArray);");
 		System.out.println(indentFormat + "setValue(newByteArray);");
 		depthDecSpace();
 		
