@@ -73,18 +73,14 @@ public class DynamicBuffer {
 
     // Returns the bytes that have been written to the buffer
     public byte[] getWrittenBytes() {
-        // Save the current position and limit of the buffer
-        int currentPosition = buffer.position();
-        buffer.flip(); // Prepare the buffer for reading (flip)
-
-        // Create a byte array to store the written data
-        byte[] writtenBytes = new byte[currentPosition];
-        buffer.get(writtenBytes); // Get the bytes that were written
-
-        // Restore the buffer's position to what it was before flipping
-        buffer.position(currentPosition);
-        
-        return writtenBytes;
+       
+       int currentPosition = buffer.position();
+       
+       byte[] writtenBytes = new byte[currentPosition];
+       buffer.rewind();
+       buffer.get(writtenBytes); // Get the bytes that were written
+       
+       return writtenBytes;
     }
     
     // Returns the current position of the buffer which is the number of bytes have been written to the buffer
