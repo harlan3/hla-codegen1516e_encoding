@@ -832,7 +832,7 @@ public class CodeGeneratorJava {
 				System.out.println(	"   }");
 				System.out.println();
 				
-				System.out.println("   private int getNumberAttributes() {");
+				System.out.println("   public int getNumberAttributes() {");
 				System.out.println();
 				System.out.println("      return numberAttributes;");
 				System.out.println("   }");
