@@ -807,6 +807,7 @@ public class CodeGeneratorJava {
 				System.out.println();
 				System.out.println("   public ObjectClassHandle objectHandle;");
 				System.out.println("   private int numberAttributes;");
+				System.out.println("   public AttributeHandleSet attribHandles;");
 				System.out.println();
 
 				for (String attribute : attributesList) {
@@ -826,7 +827,7 @@ public class CodeGeneratorJava {
 				String className = findClassname(node);
 				
 				System.out.println();
-				System.out.println("   private String getFullyQualifiedObjectName() {");
+				System.out.println("   public String getFullyQualifiedObjectName() {");
 				System.out.println();
 				System.out.println("      return \"" + className + "\"" + ";");
 				System.out.println(	"   }");
@@ -838,12 +839,13 @@ public class CodeGeneratorJava {
 				System.out.println("   }");
 				
 				System.out.println();
-				System.out.println("   private void initialize(RTIambassador rtiAmb) {");
+				System.out.println("   public void initialize(RTIambassador rtiAmb) {");
 				System.out.println();
 				System.out.println("      try {");
 				System.out.println();
 				System.out.println("         numberAttributes = " + attributesList.size() + ";");
 				System.out.println("         objectHandle = rtiAmb.getObjectClassHandle(getFullyQualifiedObjectName());");
+				System.out.println("         attribHandles = rtiAmb.getAttributeHandleSetFactory().create();");
 				System.out.println();
 				
 				for (String attribute : attributesList) {
@@ -851,8 +853,14 @@ public class CodeGeneratorJava {
 					System.out.println("         " + attributeFormatted + " = " + "rtiAmb.getAttributeHandle(objectHandle, " +
 							"\"" + attribute + "\");");
 				}
-				
 				System.out.println();
+				
+				for (String attribute : attributesList) {
+					String attributeFormatted = utils.convertToCamelCase(attribute) + "AttributeHandle";
+					System.out.println("         " + "attribHandles.add(" + attributeFormatted + ");");
+				}
+				System.out.println();
+				
 				System.out.println("      } catch (Exception e) {");
 				System.out.println("			e.printStackTrace();");
 				System.out.println("      }");
