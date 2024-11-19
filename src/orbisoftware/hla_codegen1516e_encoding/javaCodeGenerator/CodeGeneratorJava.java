@@ -137,6 +137,7 @@ public class CodeGeneratorJava {
 		System.out.println();
 		System.out.println("import java.util.Iterator;");
 		System.out.println("import java.util.Map;");
+		System.out.println("import java.util.HashMap;");
 		System.out.println();
 		CodeGeneratorJava.printCommonImports(elementReference, elementName);
 	}
@@ -470,44 +471,38 @@ public class CodeGeneratorJava {
 			else if (elementType == ElementType.Interaction)
 				attribParamTypeString = "Parameter";
 			
-			depthIncSpace(); 
-			depthIncSpace(); 
-			depthIncSpace(); 
-			depthIncSpace(); 
+			depthCurSpace();
 
 			System.out.println(indentFormat + "// ID: " + nodeID + "  " + nodeTableID);
+			System.out.println(indentFormat + "// Decode incoming data byte array to destination class variable definitions");
 			
 			// Non primitive type
 			if (primitiveType.equals("Unknown")) {
 				
-				System.out.println(indentFormat + "case " + nodeSplit[1] + attribParamTypeString + "OrdinalValue:");
+				System.out.println(indentFormat + "private void " + dataFieldName + "Decode() {" );
 				System.out.println();
-				depthIncSpace(); 
-				
+				depthIncSpace();
+				System.out.println(indentFormat + "DynamicBuffer dynamicBuffer = new DynamicBuffer();");
 				System.out.println(indentFormat + "dynamicBuffer.clear();");
-				System.out.println(indentFormat + "dynamicBuffer.put((byte []) mapEntry.getValue());");
+				System.out.println(indentFormat + "dynamicBuffer.put((byte []) currentMapEntry.getValue());");
 				System.out.println(indentFormat + "dynamicBuffer.flip();");
 				System.out.println(indentFormat + dataFieldName + ".decode(dynamicBuffer, " + dataFieldName + ".getAlignment());");
-				System.out.println(indentFormat + "break;");
+				depthDecSpace(); 
+				System.out.println(indentFormat + "}");
 				System.out.println();
-				depthDecSpace();
 			} else { // Primitive type
 				
-				System.out.println(indentFormat + "case " + nodeSplit[1] + attribParamTypeString + "OrdinalValue:");
+				System.out.println(indentFormat + "private void " + dataFieldName + "Decode() {" );
 				System.out.println();
 				depthIncSpace(); 
+				System.out.println(indentFormat + "DynamicBuffer dynamicBuffer = new DynamicBuffer();");
 				System.out.println(indentFormat + "dynamicBuffer.clear();");
-				System.out.println(indentFormat + "dynamicBuffer.put((byte []) mapEntry.getValue());");
+				System.out.println(indentFormat + "dynamicBuffer.put((byte []) currentMapEntry.getValue());");
 				System.out.println(indentFormat + dataFieldName + " = utilities.get" + classType + "FromBytes(dynamicBuffer.getWrittenBytes());");
-				System.out.println(indentFormat + "break;");
+				depthDecSpace(); 
+				System.out.println(indentFormat + "}");
 				System.out.println();
-				depthDecSpace();
 			}
-			
-			depthDecSpace(); 
-			depthDecSpace(); 
-			depthDecSpace();
-			depthDecSpace();
 		}
 		
 		NodeList nodeList = node.getChildNodes();
@@ -806,22 +801,19 @@ public class CodeGeneratorJava {
 				System.out.println("   private Utilities utilities = new Utilities();");
 				System.out.println();
 				System.out.println("   public ObjectClassHandle objectHandle;");
-				System.out.println("   private int numberAttributes;");
 				System.out.println("   public AttributeHandleSet attribHandles;");
+				System.out.println("   public boolean hasInitialized = false;");
+				System.out.println("   private int numberAttributes;");
+				System.out.println("   private RTIambassador rtiAmb;");
+				System.out.println("   private Map<Integer, Runnable> decodeActions = new HashMap<>();");
+				System.out.println("   private Map.Entry currentMapEntry;");
+						
 				System.out.println();
 
 				for (String attribute : attributesList) {
 					String attributeFormatted = utils.convertToCamelCase(attribute) + "AttributeHandle";
 					System.out.println("   private AttributeHandle " + attributeFormatted + ";");
 				}
-				
-				// Generate final integer constants used by switch statement in decode method
-				System.out.println();
-				int n=0;
-				for (String attribute : attributesList) {
-					System.out.println("   private final int " + attribute + "AttributeOrdinalValue = " + Integer.toString(n) + ";");
-					n++;
-				}	
 				
 				node = doc4.getFirstChild();
 				String className = findClassname(node);
@@ -844,6 +836,7 @@ public class CodeGeneratorJava {
 				System.out.println("      try {");
 				System.out.println();
 				System.out.println("         numberAttributes = " + attributesList.size() + ";");
+				System.out.println("         this.rtiAmb = rtiAmb;");
 				System.out.println("         objectHandle = rtiAmb.getObjectClassHandle(getFullyQualifiedObjectName());");
 				System.out.println("         attribHandles = rtiAmb.getAttributeHandleSetFactory().create();");
 				System.out.println();
@@ -852,8 +845,9 @@ public class CodeGeneratorJava {
 					String attributeFormatted = utils.convertToCamelCase(attribute) + "AttributeHandle";
 					System.out.println("         " + attributeFormatted + " = " + "rtiAmb.getAttributeHandle(objectHandle, " +
 							"\"" + attribute + "\");");
+					System.out.println("         " + "setupAttributeMappingRun(" + attributeFormatted + ");");
+					System.out.println();
 				}
-				System.out.println();
 				
 				for (String attribute : attributesList) {
 					String attributeFormatted = utils.convertToCamelCase(attribute) + "AttributeHandle";
@@ -861,11 +855,30 @@ public class CodeGeneratorJava {
 				}
 				System.out.println();
 				
+				System.out.println("         hasInitialized = true;");
 				System.out.println("      } catch (Exception e) {");
 				System.out.println("			e.printStackTrace();");
 				System.out.println("      }");
 				System.out.println("   }");
 				System.out.println();
+				
+				// Attribute mapping run method for decoding each attribute which is setup during initialization
+				System.out.println("   private void setupAttributeMappingRun(AttributeHandle attributeHandle) {");
+				System.out.println();
+				System.out.println("      try {");
+				System.out.println();
+				
+				for (String attribute : attributesList) {
+					String attributeDecode = utils.convertToCamelCase(attribute) + "Decode";
+					System.out.println("         if (attributeHandle.equals(rtiAmb.getAttributeHandle(objectHandle, \"" + attribute + "\")))");
+					System.out.println("            decodeActions.put(attributeHandle.hashCode(),() -> " + attributeDecode + "());");
+					System.out.println();
+				}
+				
+				System.out.println("      } catch (Exception e) {");
+				System.out.println("         e.printStackTrace();");
+				System.out.println("      }");
+				System.out.println("   }");				
 				
 				// Code generation
 				depthIncSpace();
@@ -891,21 +904,24 @@ public class CodeGeneratorJava {
 			    System.out.println("         for (Iterator it = theAttributeValues.entrySet().iterator(); it.hasNext();) {");
 			    System.out.println("            Map.Entry mapEntry = (Map.Entry) it.next();");
 			    System.out.println("            AttributeHandle attrib = (AttributeHandle) mapEntry.getKey();");
-			    System.out.println("            DynamicBuffer dynamicBuffer = new DynamicBuffer();");
 			    System.out.println();
 			    System.out.println("            if (attrib != null) {");
 			    System.out.println();            	
-			    System.out.println("               switch (attrib.hashCode()) {");
-			    System.out.println("");
-				generateDecode(node, ElementType.Object);
-				
-			    System.out.println("               default:");
-			    System.out.println("");
-				System.out.println("               }");
+			    System.out.println("               int hashCode = attrib.hashCode();");
+				System.out.println("               currentMapEntry = mapEntry;");
+				System.out.println();
+				System.out.println("               if (decodeActions.containsKey(hashCode))");
+				System.out.println("                  decodeActions.get(hashCode).run();");
 				System.out.println("            }");
 				System.out.println("         }");
-				System.out.println("      } catch (Exception e) { e.printStackTrace(); }");
+				System.out.println("      } catch (Exception e) {");
+				System.out.println("         e.printStackTrace();");
+				System.out.println("      }");
 				System.out.println("   }");
+				System.out.println();
+				
+				generateDecode(node, ElementType.Object);
+				
 				System.out.println("}");
 				
 				// Clear ledger if any entries exist
@@ -981,21 +997,18 @@ public class CodeGeneratorJava {
 				System.out.println("   private Utilities utilities = new Utilities();");
 				System.out.println();
 				System.out.println("   public InteractionClassHandle interactionHandle;");
+				System.out.println("   public boolean hasInitialized = false;");
 				System.out.println("   private int numberParameters;");
+				System.out.println("   private RTIambassador rtiAmb;");
+				System.out.println("   private Map<Integer, Runnable> decodeActions = new HashMap<>();");
+				System.out.println("   private Map.Entry currentMapEntry;");
 				System.out.println();
 
 				for (String parameter : parametersList) {
 					String parameterFormatted = utils.convertToCamelCase(parameter) + "ParameterHandle";
 					System.out.println("   private ParameterHandle " + parameterFormatted + ";");
 				}
-				
-				// Generate final integer constants used by switch statement in decode method
 				System.out.println();
-				int n=0;
-				for (String parameter : parametersList) {
-					System.out.println("   private final int " + parameter + "ParameterOrdinalValue = " + Integer.toString(n) + ";");
-					n++;
-				}	
 				
 				node = doc4.getFirstChild();
 				String className = findClassname(node);
@@ -1018,6 +1031,7 @@ public class CodeGeneratorJava {
 				System.out.println("      try {");
 				System.out.println();
 				System.out.println("         numberParameters = " + parametersList.size() + ";");
+				System.out.println("         this.rtiAmb = rtiAmb;");
 				System.out.println("         interactionHandle = rtiAmb.getInteractionClassHandle(getFullyQualifiedInteractionName());");
 				System.out.println();
 				
@@ -1025,14 +1039,34 @@ public class CodeGeneratorJava {
 					String parameterFormatted = utils.convertToCamelCase(parameter) + "ParameterHandle";
 					System.out.println("         " + parameterFormatted + " = " + "rtiAmb.getParameterHandle(interactionHandle, " +
 							"\"" + parameter + "\");");
+					System.out.println("         " + "setupParameterMappingRun(" + parameterFormatted + ");");
+					System.out.println();
 				}
 				
-				System.out.println();
+				System.out.println("         hasInitialized = true;");
 				System.out.println("      } catch (Exception e) {");
 				System.out.println("			e.printStackTrace();");
 				System.out.println("      }");
 				System.out.println("   }");
 				System.out.println();
+				
+				// Parameter mapping run method for decoding each parameter which is setup during initialization
+				System.out.println("   private void setupParameterMappingRun(ParameterHandle parameterHandle) {");
+				System.out.println();
+				System.out.println("      try {");
+				System.out.println();
+				
+				for (String parameter : parametersList) {
+					String parameterDecode = utils.convertToCamelCase(parameter) + "Decode";
+					System.out.println("         if (parameterHandle.equals(rtiAmb.getParameterHandle(interactionHandle, \"" + parameter + "\")))");
+					System.out.println("            decodeActions.put(parameterHandle.hashCode(),() -> " + parameterDecode + "());");
+					System.out.println();
+				}
+				
+				System.out.println("      } catch (Exception e) {");
+				System.out.println("         e.printStackTrace();");
+				System.out.println("      }");
+				System.out.println("   }");		
 				
 				// Code generation
 				depthIncSpace();
@@ -1058,21 +1092,24 @@ public class CodeGeneratorJava {
 			    System.out.println("         for (Iterator it = theParameterValues.entrySet().iterator(); it.hasNext();) {");
 			    System.out.println("            Map.Entry mapEntry = (Map.Entry) it.next();");
 			    System.out.println("            ParameterHandle param = (ParameterHandle) mapEntry.getKey();");
-			    System.out.println("            DynamicBuffer dynamicBuffer = new DynamicBuffer();");
 			    System.out.println();
 			    System.out.println("            if (param != null) {");
 			    System.out.println();            	
-			    System.out.println("               switch (param.hashCode()) {");
-			    System.out.println("");
-				generateDecode(node, ElementType.Interaction);
-				
-			    System.out.println("               default:");
-			    System.out.println("");
-				System.out.println("               }");
+			    System.out.println("               int hashCode = param.hashCode();");
+				System.out.println("               currentMapEntry = mapEntry;");
+				System.out.println();
+				System.out.println("               if (decodeActions.containsKey(hashCode))");
+				System.out.println("                  decodeActions.get(hashCode).run();");
 				System.out.println("            }");
 				System.out.println("         }");
-				System.out.println("      } catch (Exception e) { e.printStackTrace(); }");
+				System.out.println("      } catch (Exception e) {");
+				System.out.println("         e.printStackTrace();");
+				System.out.println("      }");
 				System.out.println("   }");
+				System.out.println();
+				
+				generateDecode(node, ElementType.Interaction);
+
 				System.out.println("}");
 				
 				// Clear ledger if any entries exist
