@@ -18,14 +18,13 @@
  *
  */
 
-package orbisoftware.hla_codegen1516e_encoding;
+package orbisoftware.hla_codegen1516e_encoding.codeGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import jargs.gnu.CmdLineParser;
 import orbisoftware.hla_codegen1516e_encoding.codeGeneratorTypes.EnumeratedTypeGenerator;
-import orbisoftware.hla_codegen1516e_encoding.javaCodeGenerator.CodeGeneratorJava;
 import orbisoftware.hla_pathbuilder.HlaPathBuilder;
 
 

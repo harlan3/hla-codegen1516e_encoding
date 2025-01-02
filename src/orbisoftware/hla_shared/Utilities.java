@@ -18,7 +18,7 @@
  *
  */
 
-package orbisoftware.hla_codegen1516e_encoding;
+package orbisoftware.hla_shared;
 
 import java.io.File;
 import java.nio.ByteBuffer;
@@ -26,8 +26,8 @@ import java.nio.charset.StandardCharsets;
 
 public class Utilities {
 
-	public static String packageRoot = "orbisoftware.hla_1516e_encoding.";
-	public static String packageRootDir = "orbisoftware" + File.separator + "hla_1516e_encoding";
+	public static String packageRoot = "orbisoftware.hla_shared.";
+	public static String packageRootDir = "orbisoftware" + File.separator + "hla_shared";
 	
 	public byte[] getBytesFromBoolean(boolean value) {
 
@@ -130,7 +130,9 @@ public class Utilities {
 		
     // Method to align the offset to the nearest multiple of alignment
     public int align(int offset, int alignment) {
-        return (offset + alignment - 1) & ~(alignment - 1);
+       
+       int returnVal = (offset + alignment - 1) & ~(alignment - 1);
+       return returnVal;
     }
 
     // Method to insert padding into the buffer

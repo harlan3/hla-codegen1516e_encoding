@@ -18,7 +18,7 @@
  *
  */
 
-package orbisoftware.hla_codegen1516e_encoding.javaCodeGenerator;
+package orbisoftware.hla_codegen1516e_encoding.codeGenerator;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -33,11 +33,11 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import orbisoftware.hla_codegen1516e_encoding.Utilities;
-import orbisoftware.hla_codegen1516e_encoding.javaCodeGenerator.SharedResources.ElementType;
+import orbisoftware.hla_codegen1516e_encoding.codeGenerator.SharedResources.ElementType;
 import orbisoftware.hla_pathbuilder.MMNodeTreeRepository;
 import orbisoftware.hla_pathbuilder.NodeTree;
 import orbisoftware.hla_pathbuilder.Utils;
+import orbisoftware.hla_shared.Utilities;
 
 public class CodeGeneratorJava {
 
@@ -158,7 +158,7 @@ public class CodeGeneratorJava {
 		System.out.println("import " + Utilities.packageRoot + elementReference + "." + elementName + ".VariantRecords.*;");
 		System.out.println();
 		
-		System.out.println("import orbisoftware.hla_codegen1516e_encoding.*;");
+		System.out.println("import orbisoftware.hla_shared.*;");
 		System.out.println();
 	}
 

@@ -27,14 +27,14 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import orbisoftware.hla_codegen1516e_encoding.Utilities;
-import orbisoftware.hla_codegen1516e_encoding.javaCodeGenerator.CodeGeneratorJava;
-import orbisoftware.hla_codegen1516e_encoding.javaCodeGenerator.LedgerEntry;
-import orbisoftware.hla_codegen1516e_encoding.javaCodeGenerator.NonBasicTypeLedger;
-import orbisoftware.hla_codegen1516e_encoding.javaCodeGenerator.SharedResources.ElementType;
+import orbisoftware.hla_codegen1516e_encoding.codeGenerator.CodeGeneratorJava;
+import orbisoftware.hla_codegen1516e_encoding.codeGenerator.LedgerEntry;
+import orbisoftware.hla_codegen1516e_encoding.codeGenerator.NonBasicTypeLedger;
+import orbisoftware.hla_codegen1516e_encoding.codeGenerator.SharedResources.ElementType;
 import orbisoftware.hla_pathbuilder.DatabaseAPI;
 import orbisoftware.hla_pathbuilder.Utils;
 import orbisoftware.hla_pathbuilder.db_classes.DbEnumeratedDatatype;
+import orbisoftware.hla_shared.Utilities;
 
 public class VariantRecordGenerator {
 

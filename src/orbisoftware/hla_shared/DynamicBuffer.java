@@ -18,7 +18,7 @@
  *
  */
 
-package orbisoftware.hla_codegen1516e_encoding;
+package orbisoftware.hla_shared;
 
 import java.nio.ByteBuffer;
 

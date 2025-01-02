@@ -25,12 +25,12 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import orbisoftware.hla_codegen1516e_encoding.Utilities;
-import orbisoftware.hla_codegen1516e_encoding.javaCodeGenerator.LedgerEntry;
+import orbisoftware.hla_codegen1516e_encoding.codeGenerator.LedgerEntry;
 import orbisoftware.hla_pathbuilder.DatabaseAPI;
 import orbisoftware.hla_pathbuilder.Utils;
 import orbisoftware.hla_pathbuilder.db_classes.DbEnumeratedDatatype;
 import orbisoftware.hla_pathbuilder.db_classes.DbEnumeratorDatatype;
+import orbisoftware.hla_shared.Utilities;
 
 public class EnumeratedTypeGenerator {
 

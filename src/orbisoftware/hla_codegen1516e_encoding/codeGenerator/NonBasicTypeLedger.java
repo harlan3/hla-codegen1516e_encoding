@@ -18,7 +18,7 @@
  *
  */
 
-package orbisoftware.hla_codegen1516e_encoding.javaCodeGenerator;
+package orbisoftware.hla_codegen1516e_encoding.codeGenerator;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
