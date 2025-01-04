@@ -110,7 +110,8 @@ public class PaddingArrayGenerator {
 		System.out.println("import hla.rti1516e.*;");
 		System.out.println("import hla.rti1516e.encoding.*;");
 		System.out.println("");
-		System.out.println("import orbisoftware.hla_codegen1516e_encoding.*;");
+
+		System.out.println("import " + Utilities.sharedRoot);
 		System.out.println("");
 		
 		System.out.println("import java.util.ArrayList;");

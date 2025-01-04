@@ -148,6 +148,7 @@ public class CodeGeneratorJava {
 		System.out.println("import hla.rti1516e.encoding.*;");
 		System.out.println("");
 		
+		System.out.println("import " + Utilities.sharedRoot);
 		System.out.println("import " + Utilities.packageRoot + "Enums.*;");
 		System.out.println("import " + Utilities.packageRoot + "Misc.*;");
 		System.out.println("import " + Utilities.packageRoot + elementReference + "." + elementName + ".FixedArrays.*;");

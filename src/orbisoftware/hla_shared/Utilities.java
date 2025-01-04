@@ -26,8 +26,10 @@ import java.nio.charset.StandardCharsets;
 
 public class Utilities {
 
-	public static String packageRoot = "orbisoftware.hla_shared.";
-	public static String packageRootDir = "orbisoftware" + File.separator + "hla_shared";
+	public static String packageRoot = "orbisoftware.hla_1516e_encoding.";
+	public static String packageRootDir = "orbisoftware" + File.separator + "hla_1516e_encoding";
+	
+	public static String sharedRoot = "orbisoftware.hla_shared.*;";
 	
 	public byte[] getBytesFromBoolean(boolean value) {
 

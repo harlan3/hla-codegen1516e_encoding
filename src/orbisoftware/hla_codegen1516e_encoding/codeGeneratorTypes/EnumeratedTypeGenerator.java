@@ -98,7 +98,7 @@ public class EnumeratedTypeGenerator {
 				System.out.println("package " + Utilities.packageRoot + "Enums;");
 	    		System.out.println();
 	    		
-				System.out.println("import orbisoftware.hla_codegen1516e_encoding.*;");
+				System.out.println("import " + Utilities.sharedRoot);
 				System.out.println();
 				
 				System.out.println("public class " + var1.name + " {");
