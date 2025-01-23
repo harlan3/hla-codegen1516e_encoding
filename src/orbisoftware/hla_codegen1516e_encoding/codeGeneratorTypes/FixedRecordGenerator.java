@@ -31,7 +31,9 @@ import orbisoftware.hla_codegen1516e_encoding.codeGenerator.CodeGeneratorJava;
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.LedgerEntry;
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.NonBasicTypeLedger;
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.SharedResources.ElementType;
+import orbisoftware.hla_pathbuilder.DatabaseAPI;
 import orbisoftware.hla_pathbuilder.Utils;
+import orbisoftware.hla_pathbuilder.db_classes.DbEnumeratedDatatype;
 import orbisoftware.hla_shared.Utilities;
 
 public class FixedRecordGenerator {
@@ -179,7 +181,7 @@ public class FixedRecordGenerator {
 						String[] parts = text.split(" ");
 						if (parts.length > 1) {
 							ledgerEntry.entryType = parts[0];
-							ledgerEntry.entryDataField = parts[1];
+							ledgerEntry.entryDataField = utils.convertToCamelCase(parts[1]);
 						} else {
 							Utils utils = new Utils();
 							ledgerEntry.entryType = text;
@@ -213,11 +215,15 @@ public class FixedRecordGenerator {
 			
 			boolean nonBasicType = false;
 			
-			if (ledgerEntry.entryTID.equals("Basic")) {
+			if (ledgerEntry.entryTID.equals("SimpleDatatype") && ledgerEntry.entryType.contains("HLAASCIIstring")) {
+				ledgerEntry.entryType = "HLAASCIIstringImp";
+			} else if (ledgerEntry.entryTID.equals("Basic")) {
 				ledgerEntry.entryType = utils.getPrimitiveFromEncodingType(ledgerEntry.entryType);
 				nonBasicType = false;
-			}
-			else {
+			} else if (ledgerEntry.entryTID.equals("Enumerated")) {
+				ledgerEntry.entryType = ledgerEntry.entryType;
+				nonBasicType = false;
+			} else {
 				NonBasicTypeLedger.getInstance().nonBasicTypeLedger.put(ledgerEntry.entryID, ledgerEntry);
 				nonBasicType = true;
 			}
@@ -336,10 +342,29 @@ public class FixedRecordGenerator {
 			}
 			
 			String classPrimitive = null;
+			String internalValue = null;
 			
-			if (ledgerEntry.entryTID.equals("Basic"))
+			if (ledgerEntry.entryTID.equals("SimpleDatatype")) // HLAASCIIstring
+				classPrimitive = ledgerEntry.entryType;
+			else if (ledgerEntry.entryTID.equals("Basic"))
 				classPrimitive = utils.getClassFromEncodingType(ledgerEntry.entryType);
+			else if (ledgerEntry.entryTID.equals("Enumerated")) {
+				
+				// Select all enumerated data types matching entryType
+		    	DatabaseAPI databaseAPI = new DatabaseAPI();
+		    	String enumeratedSelect = 
+		    			"SELECT * FROM EnumeratedDatatype WHERE name = '" + ledgerEntry.entryType + "'";
+		    	
+		    	List<DbEnumeratedDatatype> list1 = databaseAPI.selectFromEnumeratedDatatypeTable(enumeratedSelect);
+		    	
+				for (DbEnumeratedDatatype var1 : list1) {
 
+					internalValue = utils.getClassFromEncodingType(utils.convertFromRPRType(var1.type));
+				}
+		    	
+				classPrimitive = ledgerEntry.entryType;	
+			}
+			
 			this.depthIncSpace();
 
 			System.out.println();
@@ -447,10 +472,27 @@ public class FixedRecordGenerator {
 			}
 			
 			String classPrimitive = null;
+			String internalValue = null;
 			
 			if (ledgerEntry.entryTID.equals("Basic"))
 				classPrimitive = utils.getClassFromEncodingType(ledgerEntry.entryType);
+			else if (ledgerEntry.entryTID.equals("Enumerated")) {
+				
+				// Select all enumerated data types
+		    	DatabaseAPI databaseAPI = new DatabaseAPI();
+		    	String enumeratedSelect = 
+		    			"SELECT * FROM EnumeratedDatatype WHERE name = '" + ledgerEntry.entryType + "'";
+		    	
+		    	List<DbEnumeratedDatatype> list1 = databaseAPI.selectFromEnumeratedDatatypeTable(enumeratedSelect);
+		    	
+				for (DbEnumeratedDatatype var1 : list1) {
 
+					internalValue = utils.getClassFromEncodingType(utils.convertFromRPRType(var1.type));
+				}
+		    	
+				classPrimitive = ledgerEntry.entryType;	
+			}
+			
 			System.out.println();
 
 			depthIncSpace();

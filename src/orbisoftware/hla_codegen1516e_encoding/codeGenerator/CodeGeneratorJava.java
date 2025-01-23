@@ -155,6 +155,7 @@ public class CodeGeneratorJava {
 		System.out.println("import " + Utilities.packageRoot + elementReference + "." + elementName + ".FixedRecords.*;");
 		System.out.println("import " + Utilities.packageRoot + elementReference + "." + elementName + ".LengthlessArrays.*;");
 		System.out.println("import " + Utilities.packageRoot + elementReference + "." + elementName + ".NullTerminatedArrays.*;");
+		System.out.println("import " + Utilities.packageRoot + elementReference + "." + elementName + ".PrefixedStringLength.*;");
 		System.out.println("import " + Utilities.packageRoot + elementReference + "." + elementName + ".VariableArrays.*;");
 		System.out.println("import " + Utilities.packageRoot + elementReference + "." + elementName + ".VariantRecords.*;");
 		System.out.println();
@@ -462,7 +463,7 @@ public class CodeGeneratorJava {
 			String dataFieldName = "";
 			if (nodeSplit.length > 1)
 				dataFieldName = utils.convertToCamelCase(nodeSplit[1]);
-
+			
 			String primitiveType = utils.getPrimitiveFromEncodingType(nodeSplit[0]);
 			String classType = utils.getClassFromEncodingType(nodeSplit[0]);
 			String attribParamTypeString = "";
@@ -631,6 +632,12 @@ public class CodeGeneratorJava {
 			File nullTerminatedDir = new File(System.getProperty("user.dir") + File.separator + nullTerminatedString);
 			FileUtils.forceMkdir(nullTerminatedDir);
 			
+			final String prefixedStringLengthString = "codegen_java" + File.separator + Utilities.packageRootDir +
+					File.separator + elementType.toString() +
+					"s" + File.separator + elementName + File.separator + "PrefixedStringLength";
+			File prefixedStringLengthDir = new File(System.getProperty("user.dir") + File.separator + prefixedStringLengthString);
+			FileUtils.forceMkdir(prefixedStringLengthDir);
+			
 			final String variableArraysString = "codegen_java" + File.separator + Utilities.packageRootDir +
 					File.separator + elementType.toString() + 
 					"s" + File.separator + elementName + File.separator + "VariableArrays";
@@ -787,7 +794,7 @@ public class CodeGeneratorJava {
 				// Parse the attributes for the object
 				parseAttributes(node);
 				
-				// Start broilerplate code generation
+				// Start boilerplate code generation
 				
 				PrintStream outputStream3 = new PrintStream(
 						new File(targetObjectDir + File.separator + mmNodeTreeRepository.getObjectName(i) + ".java"));
@@ -843,6 +850,7 @@ public class CodeGeneratorJava {
 				System.out.println();
 				
 				for (String attribute : attributesList) {
+					
 					String attributeFormatted = utils.convertToCamelCase(attribute) + "AttributeHandle";
 					System.out.println("         " + attributeFormatted + " = " + "rtiAmb.getAttributeHandle(objectHandle, " +
 							"\"" + attribute + "\");");
@@ -863,7 +871,7 @@ public class CodeGeneratorJava {
 				System.out.println("   }");
 				System.out.println();
 				
-				// Attribute mapping run method for decoding each attribute which is setup during initialization
+				// Attribute mapping run method for decoding each at tribute which is setup during initialization
 				System.out.println("   private void setupAttributeMappingRun(AttributeHandle attributeHandle) {");
 				System.out.println();
 				System.out.println("      try {");
@@ -941,6 +949,7 @@ public class CodeGeneratorJava {
 				generatePlaceHolderFiles(ElementType.Object, mmNodeTreeRepository.getObjectName(i), "FixedRecords");
 				generatePlaceHolderFiles(ElementType.Object, mmNodeTreeRepository.getObjectName(i), "LengthlessArrays");
 				generatePlaceHolderFiles(ElementType.Object, mmNodeTreeRepository.getObjectName(i), "NullTerminatedArrays");
+				generatePlaceHolderFiles(ElementType.Object, mmNodeTreeRepository.getObjectName(i), "PrefixedStringLength");
 				generatePlaceHolderFiles(ElementType.Object, mmNodeTreeRepository.getObjectName(i), "VariableArrays");
 				generatePlaceHolderFiles(ElementType.Object, mmNodeTreeRepository.getObjectName(i), "VariantRecords");
 				
@@ -1128,6 +1137,7 @@ public class CodeGeneratorJava {
 				generatePlaceHolderFiles(ElementType.Interaction, mmNodeTreeRepository.getInteractionName(i), "FixedRecords");
 				generatePlaceHolderFiles(ElementType.Interaction, mmNodeTreeRepository.getInteractionName(i), "LengthlessArrays");
 				generatePlaceHolderFiles(ElementType.Interaction, mmNodeTreeRepository.getInteractionName(i), "NullTerminatedArrays");
+				generatePlaceHolderFiles(ElementType.Interaction, mmNodeTreeRepository.getInteractionName(i), "PrefixedStringLength");
 				generatePlaceHolderFiles(ElementType.Interaction, mmNodeTreeRepository.getInteractionName(i), "VariableArrays");
 				generatePlaceHolderFiles(ElementType.Interaction, mmNodeTreeRepository.getInteractionName(i), "VariantRecords");
 				

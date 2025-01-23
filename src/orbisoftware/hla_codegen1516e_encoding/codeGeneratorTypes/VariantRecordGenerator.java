@@ -222,7 +222,9 @@ public class VariantRecordGenerator {
 			
 			boolean nonBasicType = false;
 			
-			if (ledgerEntry.entryTID.equals("Basic")) {
+			if (ledgerEntry.entryTID.equals("SimpleDatatype") && ledgerEntry.entryType.contains("HLAASCIIstring")) {
+				ledgerEntry.entryType = "HLAASCIIstringImp";
+			} else if (ledgerEntry.entryTID.equals("Basic")) {
 				ledgerEntry.entryType = utils.getPrimitiveFromEncodingType(ledgerEntry.entryType);
 				nonBasicType = false;
 			} else if (ledgerEntry.entryTID.equals("Enumerated")) {
@@ -353,7 +355,9 @@ public class VariantRecordGenerator {
 			String classPrimitive = null;
 			String internalValue = null;
 			
-			if (ledgerEntry.entryTID.equals("Basic"))
+			if (ledgerEntry.entryTID.equals("SimpleDatatype")) // HLAASCIIstring
+				classPrimitive = ledgerEntry.entryType;
+			else if (ledgerEntry.entryTID.equals("Basic"))
 				classPrimitive = utils.getClassFromEncodingType(ledgerEntry.entryType);
 			else if (ledgerEntry.entryTID.equals("Enumerated")) {
 				

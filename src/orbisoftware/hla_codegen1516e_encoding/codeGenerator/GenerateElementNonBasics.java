@@ -75,9 +75,14 @@ public class GenerateElementNonBasics {
 			LedgerEntry value = valueIterator.next();
 
 			switch (value.entryTID) {
-
+			
 			case "Array":
 				generateArrayClasses(baseNode, elementType, elementName, value);
+				break;
+				
+			case "SimpleDatatype":
+				if (value.entryType.equals("HLAASCIIstringImp"))
+					implementPrefixedStringLength(baseNode, elementType, elementName, value);
 				break;
 				
 			case "FixedRecord":
@@ -254,6 +259,35 @@ public class GenerateElementNonBasics {
 
 			this.depthIncSpace();
 			System.out.println("}"); // End of class
+
+			// Remove entry from ledger after processing
+			NonBasicTypeLedger.getInstance().nonBasicTypeLedger.remove(value.entryID);
+
+		} catch (Exception e) {
+		}
+	}
+	
+	private void implementPrefixedStringLength(Node baseNode, ElementType elementType, String elementName, LedgerEntry value) {
+		
+		try {
+			final String prefixedStringLengthString = "codegen_java" + File.separator + Utilities.packageRootDir + File.separator +
+					elementType.toString() + "s" + 
+					File.separator + elementName + File.separator + "PrefixedStringLength";
+			File prefixedStringLengthDir = new File(System.getProperty("user.dir") + File.separator + prefixedStringLengthString);
+
+			PrintStream outputStream = new PrintStream(
+					new File(prefixedStringLengthDir + File.separator + value.entryType + ".java"));
+			PrintStream console = System.out;
+			System.setOut(outputStream);
+		
+			PrefixedStringLengthGenerator prefixedStringLengthGenerator = new PrefixedStringLengthGenerator(value);
+			prefixedStringLengthGenerator.setDefaults();
+
+			prefixedStringLengthGenerator.printHeader(elementName, elementType, value);
+			prefixedStringLengthGenerator.processAccessorsMutatorsNode(value);
+			prefixedStringLengthGenerator.processEncodeNode(value);
+			prefixedStringLengthGenerator.processDecodeNode(value);
+			prefixedStringLengthGenerator.generateAlignmentMethod(value);
 
 			// Remove entry from ledger after processing
 			NonBasicTypeLedger.getInstance().nonBasicTypeLedger.remove(value.entryID);
