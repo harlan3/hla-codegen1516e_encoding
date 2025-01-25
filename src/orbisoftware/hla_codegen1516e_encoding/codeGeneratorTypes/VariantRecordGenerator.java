@@ -224,6 +224,7 @@ public class VariantRecordGenerator {
 			
 			if (ledgerEntry.entryTID.equals("SimpleDatatype") && ledgerEntry.entryType.contains("HLAASCIIstring")) {
 				ledgerEntry.entryType = "HLAASCIIstringImp";
+				nonBasicType = true;
 			} else if (ledgerEntry.entryTID.equals("Basic")) {
 				ledgerEntry.entryType = utils.getPrimitiveFromEncodingType(ledgerEntry.entryType);
 				nonBasicType = false;
