@@ -99,7 +99,7 @@ public class GenerateElementNonBasics {
 			break;
 
 		case "HLAvariableArray":
-			if (value.entryType.equals("HLAASCIIstring"))
+			if (value.entryType.equals("HLAASCIIstringImp"))
 				implementPrefixedStringLength(baseNode, elementType, elementName, value);
 			else
 				implementVariableArray(baseNode, elementType, elementName, value);
@@ -272,9 +272,6 @@ public class GenerateElementNonBasics {
 					elementType.toString() + "s" + 
 					File.separator + elementName + File.separator + "PrefixedStringLength";
 			File prefixedStringLengthDir = new File(System.getProperty("user.dir") + File.separator + prefixedStringLengthString);
-			
-			// Avoid class name collision with HLAASCIIstring
-			value.entryType = value.entryType + "Imp";
 			
 			PrintStream outputStream = new PrintStream(
 					new File(prefixedStringLengthDir + File.separator + value.entryType + ".java"));
