@@ -80,11 +80,6 @@ public class GenerateElementNonBasics {
 				generateArrayClasses(baseNode, elementType, elementName, value);
 				break;
 				
-			case "SimpleDatatype":
-				if (value.entryType.equals("HLAASCIIstringImp"))
-					implementPrefixedStringLength(baseNode, elementType, elementName, value);
-				break;
-				
 			case "FixedRecord":
 				implementFixedRecord(baseNode, elementType, elementName, value);
 				break;
@@ -104,7 +99,10 @@ public class GenerateElementNonBasics {
 			break;
 
 		case "HLAvariableArray":
-			implementVariableArray(baseNode, elementType, elementName, value);
+			if (value.entryType.equals("HLAASCIIstring"))
+				implementPrefixedStringLength(baseNode, elementType, elementName, value);
+			else
+				implementVariableArray(baseNode, elementType, elementName, value);
 			break;
 			
 		case "RPRlengthlessArray":
@@ -274,7 +272,10 @@ public class GenerateElementNonBasics {
 					elementType.toString() + "s" + 
 					File.separator + elementName + File.separator + "PrefixedStringLength";
 			File prefixedStringLengthDir = new File(System.getProperty("user.dir") + File.separator + prefixedStringLengthString);
-
+			
+			// Avoid class name collision with HLAASCIIstring
+			value.entryType = value.entryType + "Imp";
+			
 			PrintStream outputStream = new PrintStream(
 					new File(prefixedStringLengthDir + File.separator + value.entryType + ".java"));
 			PrintStream console = System.out;
