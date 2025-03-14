@@ -23,14 +23,22 @@ package orbisoftware.hla_shared;
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.Random;
 
 public class Utilities {
 
 	public static String packageRoot = "orbisoftware.hla_1516e_encoding.";
 	public static String packageRootDir = "orbisoftware" + File.separator + "hla_1516e_encoding";
-	
+
 	public static String sharedRoot = "orbisoftware.hla_shared.*;";
-	
+
+	public byte[] generateRandomBytes(int length) {
+
+		byte[] bytes = new byte[length];
+		new Random().nextBytes(bytes);
+		return bytes;
+	}
+
 	public byte[] getBytesFromBoolean(boolean value) {
 
 		if (value)
@@ -81,7 +89,7 @@ public class Utilities {
 		else
 			return false;
 	}
-	
+
 	public byte getByteFromBytes(byte[] bytes) {
 
 		return ByteBuffer.wrap(bytes).get(0);
@@ -129,21 +137,50 @@ public class Utilities {
 		else
 			return javaString;
 	}
-		
-    // Method to align the offset to the nearest multiple of alignment
-    public int align(int offset, int alignment) {
-       
-       int returnVal = (offset + alignment - 1) & ~(alignment - 1);
-       return returnVal;
-    }
 
-    // Method to insert padding into the buffer
-    public void insertPadding(DynamicBuffer buffer, int offset, int alignment) {
-        int alignedOffset = align(offset, alignment);
-        int paddingSize = alignedOffset - offset;
+	public String primitiveAssignment(String primitiveType) {
 
-        for (int i = 0; i < paddingSize; i++) {
-            buffer.put((byte) 0x00); // Insert padding bytes (0x00)
-        }
-    }
+		String returnVal = "";
+
+		switch (primitiveType) {
+
+		case "boolean":
+			returnVal = "false";
+			break;
+
+		case "byte":
+		case "short":
+		case "int":
+		case "long":
+			returnVal = "0";
+			break;
+
+		case "float":
+			returnVal = "0.0f";
+			break;
+
+		case "double":
+			returnVal = "0.0";
+			break;
+		}
+
+		return returnVal;
+	}
+
+	// Method to align the offset to the nearest multiple of alignment
+	public int align(int offset, int alignment) {
+
+		int returnVal = (offset + alignment - 1) & ~(alignment - 1);
+		return returnVal;
+	}
+
+	// Method to insert padding into the buffer
+	public void insertPadding(DynamicBuffer buffer, int offset, int alignment) {
+		int alignedOffset = align(offset, alignment);
+		int paddingSize = alignedOffset - offset;
+
+		for (int i = 0; i < paddingSize; i++) {
+			buffer.put((byte) 0x00); // Insert padding bytes (0x00)
+		}
+	}
 }

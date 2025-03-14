@@ -230,7 +230,7 @@ public class VariantRecordGenerator {
 				nonBasicType = false;
 			} else if (ledgerEntry.entryTID.equals("Enumerated")) {
 				ledgerEntry.entryType = ledgerEntry.entryType;
-				nonBasicType = false;
+				nonBasicType = true;
 			} else {
 				NonBasicTypeLedger.getInstance().nonBasicTypeLedger.put(ledgerEntry.entryID, ledgerEntry);
 				nonBasicType = true;
