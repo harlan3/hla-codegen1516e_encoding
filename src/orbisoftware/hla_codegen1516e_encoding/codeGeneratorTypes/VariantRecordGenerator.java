@@ -48,7 +48,15 @@ public class VariantRecordGenerator {
 	
 	private List<String> nonBasicFields = new ArrayList<String>();
 	
-	private int caseCounter;
+	private String variantClassName = "";
+	
+	private String variantDiscriminant = "";
+	
+	private boolean useVariantOrdering;
+	
+	private int[] variantOrdering;
+	
+	private int caseIncCounter;
 	
 	private int largestStructureMember;
 	
@@ -62,7 +70,7 @@ public class VariantRecordGenerator {
 	public void setDefaults() {
 
 		indentSpace = 0;
-		caseCounter = 0;
+		caseIncCounter = 0;
 	}
 	
 	private void depthIncSpace() {
@@ -115,6 +123,15 @@ public class VariantRecordGenerator {
 		// Return null if no matching node is found in this subtree
 		return null;
 	}
+	
+	public void setVariantOrderingArray(String variantClassName, String variantDiscriminant, int[] variantOrdering) {
+		
+		this.variantClassName = variantClassName;
+		this.variantDiscriminant = variantDiscriminant;
+		this.variantOrdering = variantOrdering;
+		
+		useVariantOrdering = true;
+	}
 
 	public void printHeader(String elementClassname, ElementType elementType) {
 
@@ -135,7 +152,7 @@ public class VariantRecordGenerator {
 		System.out.println("@SuppressWarnings(\"unused\")");
 		System.out.println("public class " + ledgerEntry.entryType + " {");
 		System.out.println();
-
+		
 		depthIncSpace();
 
 		System.out.println(indentFormat + "private Utilities utilities = new Utilities();");
@@ -222,10 +239,7 @@ public class VariantRecordGenerator {
 			
 			boolean nonBasicType = false;
 			
-			if (ledgerEntry.entryTID.equals("SimpleDatatype") && ledgerEntry.entryType.contains("HLAASCIIstring")) {
-				ledgerEntry.entryType = "HLAASCIIstringImp";
-				nonBasicType = true;
-			} else if (ledgerEntry.entryTID.equals("Basic")) {
+			if (ledgerEntry.entryTID.equals("Basic")) {
 				ledgerEntry.entryType = utils.getPrimitiveFromEncodingType(ledgerEntry.entryType);
 				nonBasicType = false;
 			} else if (ledgerEntry.entryTID.equals("Enumerated")) {
@@ -356,9 +370,7 @@ public class VariantRecordGenerator {
 			String classPrimitive = null;
 			String internalValue = null;
 			
-			if (ledgerEntry.entryTID.equals("SimpleDatatype")) // HLAASCIIstring
-				classPrimitive = ledgerEntry.entryType;
-			else if (ledgerEntry.entryTID.equals("Basic"))
+			if (ledgerEntry.entryTID.equals("Basic"))
 				classPrimitive = utils.getClassFromEncodingType(ledgerEntry.entryType);
 			else if (ledgerEntry.entryTID.equals("Enumerated")) {
 				
@@ -398,7 +410,12 @@ public class VariantRecordGenerator {
 				if (fieldSize > largestStructureMember)
 					largestStructureMember = fieldSize;
 				
-				caseCounter = 0;
+				caseIncCounter = 0;
+				if (variantDiscriminant.equals(ledgerEntry.entryDataField.toLowerCase()))
+					this.useVariantOrdering = true;
+				else
+					this.useVariantOrdering = false;
+				
 			// This is a possible discriminant field for the variant record
 			} else if (ledgerEntry.entryTID.equals("Enumerated") && ledgerEntry.entryIsDiscriminant) {
 
@@ -415,21 +432,41 @@ public class VariantRecordGenerator {
 				if (fieldSize > largestStructureMember)
 					largestStructureMember = fieldSize;
 				
-				caseCounter = 0;
+				caseIncCounter = 0;
+				if (variantDiscriminant.equals(ledgerEntry.entryDataField.toLowerCase()))
+					this.useVariantOrdering = true;
+				else
+					this.useVariantOrdering = false;
 			} else if (ledgerEntry.entryTID.equals("Basic")) {
 				
-				System.out.println(indentFormat + "case " + caseCounter + ":");
+				try {
+					if (useVariantOrdering)
+						System.out.println(indentFormat + "case " + variantOrdering[caseIncCounter] + ":");
+					else
+						System.out.println(indentFormat + "case " + caseIncCounter + ":");
+				} catch (Exception e) {
+					System.out.println("Exception in variant record Encode, when using variant ordering for class" + variantClassName);
+				}
+				
 				System.out.println(indentFormat + "// Align and write the " + classPrimitive + " field");
 				System.out.println(indentFormat + "utilities.insertPadding(buffer, bufferOffset, alignment);");
 				System.out.println(indentFormat + "buffer.put(utilities.getBytesFrom" + classPrimitive + "(" + ledgerEntry.entryDataField + "));");
 				System.out.println(indentFormat + "bufferOffset = buffer.position();");
 				System.out.println(indentFormat + "break;");
 				
-				caseCounter++;
+				caseIncCounter++;
 			
 			} else {
 				
-				System.out.println(indentFormat + "case " + caseCounter + ":");
+				try {
+					if (useVariantOrdering)
+						System.out.println(indentFormat + "case " + variantOrdering[caseIncCounter] + ":");
+					else
+						System.out.println(indentFormat + "case " + caseIncCounter + ":");
+				} catch (Exception e) {
+					System.out.println("Exception in variant record Encode, when using variant ordering for class" + variantClassName);
+				}
+				
 				System.out.println(indentFormat + "// Write the nested structure, aligned with largest field size");
 				System.out.println(indentFormat + ledgerEntry.entryDataField + ".encode(buffer, alignment);");
 				System.out.println(indentFormat + "bufferOffset = buffer.position();");
@@ -437,7 +474,7 @@ public class VariantRecordGenerator {
 				
 				nonBasicFields.add(ledgerEntry.entryDataField);
 				
-				caseCounter++;
+				caseIncCounter++;
 			}
 			this.depthDecSpace();
 			this.depthDecSpace();
@@ -576,7 +613,11 @@ public class VariantRecordGenerator {
 				
 				this.depthIncSpace();
 				
-				caseCounter = 0;
+				caseIncCounter = 0;
+				if (variantDiscriminant.equals(ledgerEntry.entryDataField.toLowerCase()))
+					this.useVariantOrdering = true;
+				else
+					this.useVariantOrdering = false;
 			} 
 			// This is a possible discriminant field for the variant record
 			else if (ledgerEntry.entryTID.equals("Enumerated") && ledgerEntry.entryIsDiscriminant) {
@@ -599,10 +640,22 @@ public class VariantRecordGenerator {
 				
 				this.depthIncSpace();
 				
-				caseCounter = 0;
+				caseIncCounter = 0;
+				if (variantDiscriminant.equals(ledgerEntry.entryDataField.toLowerCase()))
+					this.useVariantOrdering = true;
+				else
+					this.useVariantOrdering = false;
 			} else if (ledgerEntry.entryTID.equals("Basic")) {
 				
-				System.out.println(indentFormat + "case " + caseCounter + ":");
+				try {
+					if (useVariantOrdering)
+						System.out.println(indentFormat + "case " + variantOrdering[caseIncCounter] + ":");
+					else
+						System.out.println(indentFormat + "case " + caseIncCounter + ":");
+				} catch (Exception e) {
+					System.out.println("Exception in variant record Decode, when using variant ordering for class" + variantClassName);
+				}
+				
 				System.out.println(indentFormat + "// Align and read the " + classPrimitive + " field");
 				System.out.println(indentFormat + "bufferOffset = utilities.align(bufferOffset, alignment);");
 				System.out.println(indentFormat + "buffer.position(bufferOffset);");
@@ -618,17 +671,25 @@ public class VariantRecordGenerator {
 					System.out.println(indentFormat + "bufferOffset += " + classPrimitive + ".BYTES;");
 				System.out.println(indentFormat + "break;");
 				
-				caseCounter++;
+				caseIncCounter++;
 				
 			} else {
 				
-				System.out.println(indentFormat + "case " + caseCounter + ":");
+				try {
+					if (useVariantOrdering)
+						System.out.println(indentFormat + "case " + variantOrdering[caseIncCounter] + ":");
+					else
+						System.out.println(indentFormat + "case " + caseIncCounter + ":");
+				} catch (Exception e) {
+					System.out.println("Exception in variant record Decode, when using variant ordering for class" + variantClassName);
+				}
+				
 				System.out.println(indentFormat + "// Write the nested structure, aligned with largest field size");
 				System.out.println(indentFormat + ledgerEntry.entryDataField + ".decode(buffer, alignment);");
 				System.out.println(indentFormat + "bufferOffset = buffer.position();");
 				System.out.println(indentFormat + "break;");
 				
-				caseCounter++;
+				caseIncCounter++;
 			}
 			
 			this.depthDecSpace();

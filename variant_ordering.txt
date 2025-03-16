@@ -1,0 +1,2 @@
+# Variant | Discriminant | Ordering
+SpreadSpectrumVariantStruct | SpreadSpectrumType | 6, 2, 3, 1

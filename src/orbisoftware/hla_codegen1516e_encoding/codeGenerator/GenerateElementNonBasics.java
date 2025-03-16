@@ -23,12 +23,16 @@ package orbisoftware.hla_codegen1516e_encoding.codeGenerator;
 import java.io.File;
 import java.io.PrintStream;
 import java.util.Iterator;
+import java.util.List;
 
 import org.w3c.dom.Node;
 
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.SharedResources.ElementType;
 import orbisoftware.hla_codegen1516e_encoding.codeGeneratorTypes.*;
+import orbisoftware.hla_pathbuilder.DatabaseAPI;
 import orbisoftware.hla_pathbuilder.Utils;
+import orbisoftware.hla_pathbuilder.db_classes.DbEnumeratedDatatype;
+import orbisoftware.hla_pathbuilder.db_classes.DbVariantOrderingDatatype;
 import orbisoftware.hla_shared.Utilities;
 
 public class GenerateElementNonBasics {
@@ -202,6 +206,32 @@ public class GenerateElementNonBasics {
 			File variantRecordsDir = new File(System.getProperty("user.dir") + File.separator + variantRecordsString);
 		
 			VariantRecordGenerator variantRecordGenerator = new VariantRecordGenerator(value);
+			
+			// Select variant ordering for entry type
+	    	DatabaseAPI databaseAPI = new DatabaseAPI();
+	    	String variantOrderingSelect = 
+	    			"SELECT * FROM VariantOrdering WHERE variant = '" + value.entryType + "'";
+	    	
+	    	List<DbVariantOrderingDatatype> list1 = databaseAPI.selectFromVariantOrderingDatatypeTable(variantOrderingSelect);
+	    	
+			for (DbVariantOrderingDatatype var1 : list1) {
+
+				String variant = var1.variant;
+				String discrimant = var1.discriminant.toLowerCase();
+				
+		        // Split the string by commas
+		        String[] strArray = var1.ordering.split(",");
+
+		        // Create an integer array to store the converted values
+		        int[] intArray = new int[strArray.length];
+
+		        // Convert each element to an integer and store it in the int array
+		        for (int i = 0; i < strArray.length; i++) {
+		            intArray[i] = Integer.parseInt(strArray[i].trim());
+		        }
+		           
+		        variantRecordGenerator.setVariantOrderingArray(variant, discrimant, intArray);
+			}
 
 			PrintStream outputStream = new PrintStream(
 					new File(variantRecordsDir + File.separator + value.entryType + ".java"));
@@ -262,6 +292,7 @@ public class GenerateElementNonBasics {
 			NonBasicTypeLedger.getInstance().nonBasicTypeLedger.remove(value.entryID);
 
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
