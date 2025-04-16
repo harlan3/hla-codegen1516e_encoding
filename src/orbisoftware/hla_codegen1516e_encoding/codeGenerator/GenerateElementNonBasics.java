@@ -105,6 +105,8 @@ public class GenerateElementNonBasics {
 		case "HLAvariableArray":
 			if (value.entryType.equals("HLAASCIIstringImp"))
 				implementPrefixedStringLength(baseNode, elementType, elementName, value);
+			else if (value.entryType.equals("HLAunicodeStringImp"))
+				implementPrefixedStringLengthUnicode(baseNode, elementType, elementName, value);
 			else
 				implementVariableArray(baseNode, elementType, elementName, value);
 			break;
@@ -317,6 +319,35 @@ public class GenerateElementNonBasics {
 			prefixedStringLengthGenerator.processEncodeNode(value);
 			prefixedStringLengthGenerator.processDecodeNode(value);
 			prefixedStringLengthGenerator.generateAlignmentMethod(value);
+
+			// Remove entry from ledger after processing
+			NonBasicTypeLedger.getInstance().nonBasicTypeLedger.remove(value.entryID);
+
+		} catch (Exception e) {
+		}
+	}
+	
+	private void implementPrefixedStringLengthUnicode(Node baseNode, ElementType elementType, String elementName, LedgerEntry value) {
+		
+		try {
+			final String prefixedStringLengthString = "codegen_java" + File.separator + Utilities.packageRootDir + File.separator +
+					elementType.toString() + "s" + 
+					File.separator + elementName + File.separator + "PrefixedStringLength";
+			File prefixedStringLengthDir = new File(System.getProperty("user.dir") + File.separator + prefixedStringLengthString);
+			
+			PrintStream outputStream = new PrintStream(
+					new File(prefixedStringLengthDir + File.separator + value.entryType + ".java"));
+			PrintStream console = System.out;
+			System.setOut(outputStream);
+		
+			PrefixedStringLengthUnicodeGenerator prefixedStringLengthUnicodeGenerator = new PrefixedStringLengthUnicodeGenerator(value);
+			prefixedStringLengthUnicodeGenerator.setDefaults();
+
+			prefixedStringLengthUnicodeGenerator.printHeader(elementName, elementType, value);
+			prefixedStringLengthUnicodeGenerator.processAccessorsMutatorsNode(value);
+			prefixedStringLengthUnicodeGenerator.processEncodeNode(value);
+			prefixedStringLengthUnicodeGenerator.processDecodeNode(value);
+			prefixedStringLengthUnicodeGenerator.generateAlignmentMethod(value);
 
 			// Remove entry from ledger after processing
 			NonBasicTypeLedger.getInstance().nonBasicTypeLedger.remove(value.entryID);

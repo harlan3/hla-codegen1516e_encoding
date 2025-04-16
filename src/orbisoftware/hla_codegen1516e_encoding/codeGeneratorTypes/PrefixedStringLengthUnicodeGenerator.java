@@ -30,8 +30,8 @@ import orbisoftware.hla_codegen1516e_encoding.codeGenerator.SharedResources.Elem
 import orbisoftware.hla_pathbuilder.Utils;
 import orbisoftware.hla_shared.Utilities;
 
-// This array is of non primitive type
-public class VariableArrayType2Generator {
+// This array is of primitive type
+public class PrefixedStringLengthUnicodeGenerator {
 
 	public static int indentSpace;
 
@@ -69,7 +69,7 @@ public class VariableArrayType2Generator {
 			indentFormat = String.format("%" + (indentSpace) + "s", "");
 	}
 
-	public VariableArrayType2Generator(LedgerEntry ledgerEntry) {
+	public PrefixedStringLengthUnicodeGenerator(LedgerEntry ledgerEntry) {
 
 		this.ledgerEntry = ledgerEntry;
 	}
@@ -103,14 +103,14 @@ public class VariableArrayType2Generator {
 	}
 
 	public void printHeader(String elementClassname, ElementType elementType, LedgerEntry value) {
-
+		
 		String elementReference = "";
 		
 		if (elementType == ElementType.Object) {
-			System.out.println("package " + Utilities.packageRoot + "Objects." + elementClassname + ".VariableArrays;");
+			System.out.println("package " + Utilities.packageRoot + "Objects." + elementClassname + ".PrefixedStringLength;");
 			elementReference = "Objects";
 		} else {
-			System.out.println("package " + Utilities.packageRoot + "Interactions." + elementClassname + ".VariableArrays;");
+			System.out.println("package " + Utilities.packageRoot + "Interactions." + elementClassname + ".PrefixedStringLength;");
 			elementReference = "Interactions";
 		}
 
@@ -118,114 +118,102 @@ public class VariableArrayType2Generator {
 
 		CodeGeneratorJava.printCommonImports(elementReference, elementClassname);
 		
-		System.out.println("import java.util.ArrayList;");
+		System.out.println(indentFormat + "import java.io.UnsupportedEncodingException;");
+		System.out.println(indentFormat + "import java.nio.charset.StandardCharsets;");
+		System.out.println(indentFormat + "import java.util.ArrayList;");
+		System.out.println(indentFormat + "import java.util.List;");
 		System.out.println();
+
+		System.out.println(indentFormat + "// HLAunicodeString has a size prefix containing the length of the string, where each letter is two bytes");
 		
-		System.out.println("@SuppressWarnings(\"unused\")");
-		System.out.println("public class " + ledgerEntry.entryType + " {");
+		System.out.println(indentFormat + "@SuppressWarnings(\"unused\")");
+		System.out.println(indentFormat + "public class " + ledgerEntry.entryType + " {");
 		System.out.println();
 		
 		depthIncSpace();
-		
 		System.out.println(indentFormat + "private Utilities utilities = new Utilities();");
 		System.out.println();
 		
 		System.out.println(indentFormat + "// Constructor");
 		System.out.println(indentFormat + "public " + ledgerEntry.entryType + "()" + " {");
-		System.out.println();
-		
+		System.out.println("");
 		System.out.println(indentFormat + "}");
+		System.out.println();
 	}
 
 	public void processAccessorsMutatorsNode(LedgerEntry ledgerEntry) {
-		
-		Utilities utilities = new Utilities();
-		String nativeClass = ledgerEntry.entryClassType;
-		nativeClass = utilities.substituteImplementations(nativeClass);
-		String variableName = utils.convertToCamelCase(nativeClass);
+
+		String primitiveClass;
 		
 		depthCurSpace();
 		
-		System.out.println();
-		System.out.println(indentFormat + "// Class " + nativeClass);
-		System.out.println(indentFormat + "private ArrayList<" + nativeClass +
-				"> internalClassRepresentation = new ArrayList<" + nativeClass + ">();");
-		System.out.println();
-		System.out.println(indentFormat + "public int sizeOfValue() {");
-		System.out.println();
-		depthIncSpace();
-		System.out.println(indentFormat + "return internalClassRepresentation.size();");
-		depthDecSpace();
-		System.out.println(indentFormat + "}");
+		System.out.println(indentFormat + "// Class String");
+		System.out.println(indentFormat + "private List<Byte> internalClassRepresentation = new ArrayList<>();");
 		System.out.println();
 		
 		System.out.println(indentFormat + "// Setter");
-		System.out.println(indentFormat + "public void set" + nativeClass + "(int index, " +
-				nativeClass + " " + variableName + ") {");
+		System.out.println(indentFormat + "public void setString(String newString) {");
 		System.out.println();
-		
 		depthIncSpace();
 		
-		System.out.println(indentFormat + "internalClassRepresentation.add(index, " + variableName + ");");
-		
+		System.out.println(indentFormat + "try {");
+		depthIncSpace();
+		System.out.println(indentFormat + "byte[] utf16Bytes = newString.getBytes(\"UTF-16BE\");");
+		System.out.println();
+		System.out.println(indentFormat + "for (byte oneByte : utf16Bytes)");
+		depthIncSpace();
+		System.out.println(indentFormat + "internalClassRepresentation.add(oneByte);");
+		System.out.println();
+		depthDecSpace();
+		depthDecSpace();
+		System.out.println(indentFormat + "} catch (UnsupportedEncodingException e) {");
+		System.out.println(indentFormat + "}");
+		depthDecSpace();		
 		depthDecSpace();
 		System.out.println(indentFormat + "}");
-		
 		System.out.println();
+		
 		System.out.println(indentFormat + "// Getter");
-		System.out.println(indentFormat + "public " + nativeClass + " get" + nativeClass + "(int index) {");
-		depthIncSpace();
+		System.out.println(indentFormat + "public String getString() {");
 		System.out.println();
-		System.out.println(indentFormat + "return internalClassRepresentation.get(index);");
+		depthIncSpace();
+		depthIncSpace();
+		System.out.println(indentFormat + "try {");
+		depthIncSpace();
+		System.out.println(indentFormat + "byte[] utf16Bytes = new byte[internalClassRepresentation.size()];");
+		System.out.println();
+		System.out.println(indentFormat + "for (int i = 0; i < internalClassRepresentation.size(); i++) {");
+		depthIncSpace();
+		System.out.println(indentFormat + "utf16Bytes[i] = internalClassRepresentation.get(i);");
 		depthDecSpace();
 		System.out.println(indentFormat + "}");
 		System.out.println();
-	}
-	
-	public void processGetElementSizeMethod(LedgerEntry ledgerEntry) {
-		
-		Utilities utilities = new Utilities();
-		String nativeClass = ledgerEntry.entryClassType;
-		nativeClass = utilities.substituteImplementations(nativeClass);
-		
-		depthCurSpace();
-		System.out.println(indentFormat + "// Get the element size");
-		System.out.println(indentFormat + "private int getElementSize(int alignment) {");
-		System.out.println();
+		System.out.println(indentFormat + "return new String(utf16Bytes, \"UTF-16BE\");");
+		depthDecSpace();
+		System.out.println(indentFormat + "} catch (UnsupportedEncodingException e) {");
 		depthIncSpace();
-		System.out.println(indentFormat + "// Determine the number of bytes for an element");
-		System.out.println(indentFormat + "DynamicBuffer tmpBuffer = new DynamicBuffer();");
-		System.out.println(indentFormat + "new " + nativeClass + "().encode(tmpBuffer, alignment);");
-		System.out.println(indentFormat + "int elementSize = tmpBuffer.position();");
-		System.out.println();
-		System.out.println(indentFormat +"return elementSize;");
+		System.out.println(indentFormat + "return \"\";");
 		depthDecSpace();
 		System.out.println(indentFormat + "}");
-		System.out.println();
+		depthDecSpace();
+		System.out.println(indentFormat + "}");
+		depthDecSpace();
 	}
 	
 	public void processEncodeNode(LedgerEntry ledgerEntry) {
-		
+
 		depthCurSpace();
+		System.out.println();
 		System.out.println(indentFormat + "// Encode outgoing data obtained from internal class representation into DynamicBuffer");
 		System.out.println(indentFormat + "public void encode(DynamicBuffer buffer, int alignment) {");
 		System.out.println();
-		
 		depthIncSpace();
-		System.out.println(indentFormat + "int elementSize = getElementSize(alignment);");
-		System.out.println(indentFormat + "DynamicBuffer tmpBuffer = new DynamicBuffer();");
-		System.out.println(indentFormat + "byte[] elementBytes = new byte[elementSize];");
-		System.out.println();
-		System.out.println(indentFormat + "buffer.put(utilities.getBytesFromInteger(internalClassRepresentation.size()));");
-		System.out.println();
-		System.out.println(indentFormat + "for (int i=0; i < internalClassRepresentation.size(); i++) {");
-		System.out.println();
 		depthIncSpace();
-		System.out.println(indentFormat + "tmpBuffer.rewind();");
-		System.out.println(indentFormat + "internalClassRepresentation.get(i).encode(tmpBuffer, alignment);");
-		System.out.println(indentFormat + "tmpBuffer.rewind();");
-		System.out.println(indentFormat + "tmpBuffer.get(elementBytes);");
-		System.out.println(indentFormat + "buffer.put(elementBytes);");
+		System.out.println(indentFormat + "buffer.put(utilities.getBytesFromInteger(internalClassRepresentation.size() / 2));");
+		System.out.println();
+		System.out.println(indentFormat + "for (int i = 0; i < internalClassRepresentation.size(); i++) {");
+		depthIncSpace();
+		System.out.println(indentFormat + "buffer.put(internalClassRepresentation.get(i));");
 		depthDecSpace();
 		System.out.println(indentFormat + "}");
 		depthDecSpace();
@@ -234,40 +222,27 @@ public class VariableArrayType2Generator {
 	}
 	
 	public void processDecodeNode(LedgerEntry ledgerEntry) {
-		
-		Utilities utilities = new Utilities();
-		String nativeClass = ledgerEntry.entryClassType;
-		nativeClass = utilities.substituteImplementations(nativeClass);
-		
+				
 		depthCurSpace();
 		System.out.println(indentFormat + "// Decode incoming data obtained from DynamicBuffer into internal class representation");
 		System.out.println(indentFormat + "public void decode(DynamicBuffer buffer, int alignment) {");
-		System.out.println();
-		
+		System.out.println();	
 		depthIncSpace();
-		System.out.println(indentFormat + "int elementSize = getElementSize(alignment);");
-		System.out.println(indentFormat + "DynamicBuffer tmpBuffer = new DynamicBuffer();");
 		System.out.println(indentFormat + "byte[] sizeBytes = new byte[Integer.BYTES];");
-		System.out.println(indentFormat + "byte[] elementBytes = new byte[elementSize];");
 		System.out.println();
-		
+		System.out.println(indentFormat + "internalClassRepresentation.clear();");
+		System.out.println();
 		System.out.println(indentFormat + "buffer.rewind();");
 		System.out.println(indentFormat + "buffer.get(sizeBytes);");
 		System.out.println(indentFormat + "int numElements = utilities.getIntegerFromBytes(sizeBytes);");
 		System.out.println();
-		
-		System.out.println(indentFormat + "for (int i=0; i < numElements; i++) {");
+		System.out.println(indentFormat + "byte[] stringBytes = new byte[numElements * 2];");
+		System.out.println(indentFormat + "buffer.get(stringBytes);");
 		System.out.println();
+		System.out.println(indentFormat + "for (int i = 0; i < numElements * 2; i++)");
 		depthIncSpace();
-		System.out.println(indentFormat + "buffer.position(i * elementSize + Integer.BYTES);");
-		System.out.println(indentFormat + "buffer.get(elementBytes);");
-		System.out.println(indentFormat + "tmpBuffer.rewind();");
-		System.out.println(indentFormat + "tmpBuffer.put(elementBytes);");
-		System.out.println(indentFormat + "tmpBuffer.rewind();");
-		System.out.println(indentFormat + "internalClassRepresentation.add(new " + nativeClass + "());");
-		System.out.println(indentFormat + "internalClassRepresentation.get(i).decode(tmpBuffer, alignment);");
+		System.out.println(indentFormat + "internalClassRepresentation.add(i, stringBytes[i]);");
 		depthDecSpace();
-		System.out.println(indentFormat + "}");
 		depthDecSpace();
 		System.out.println(indentFormat + "}");
 		System.out.println();

@@ -183,4 +183,27 @@ public class Utilities {
 			buffer.put((byte) 0x00); // Insert padding bytes (0x00)
 		}
 	}
+	
+	// Method returning substitute implementation
+	public String substituteImplementations(String nativeClass) {
+		
+		String returnVal = nativeClass;
+		
+		switch(nativeClass) {
+		
+		case "HLAunicodeString":
+			returnVal = "HLAunicodeStringImp";
+			break;
+			
+		case "HLAopaqueData":
+			returnVal = "HLAopaqueDataImp";
+			break;
+			
+		case "HLAASCIIstring":
+			returnVal = "HLAASCIIstringImp";
+			break;
+		}
+		
+		return returnVal;
+	}
 }
