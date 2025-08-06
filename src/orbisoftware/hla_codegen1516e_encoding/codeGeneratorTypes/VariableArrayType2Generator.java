@@ -103,8 +103,6 @@ public class VariableArrayType2Generator {
 	}
 
 	public void printHeader(String elementClassname, ElementType elementType, LedgerEntry value) {
-
-		String elementReference = "";
 		
 		System.out.println("package " + Utilities.packageRoot + "Common.VariableArrays;");
 
