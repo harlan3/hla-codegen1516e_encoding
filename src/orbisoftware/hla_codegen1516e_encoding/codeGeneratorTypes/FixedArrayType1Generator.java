@@ -102,21 +102,13 @@ public class FixedArrayType1Generator {
 		return null;
 	}
 
-	public void printHeader(String elementClassname, ElementType elementType, LedgerEntry value) {
-
-		String elementReference = "";
+	public void printHeader(LedgerEntry value) {
 		
-		if (elementType == ElementType.Object) {
-			System.out.println("package " + Utilities.packageRoot + "Objects." + elementClassname + ".FixedArrays;");
-			elementReference = "Objects";
-		} else {
-			System.out.println("package " + Utilities.packageRoot + "Interactions." + elementClassname + ".FixedArrays;");
-			elementReference = "Interactions";
-		}
+		System.out.println("package " + Utilities.packageRoot + "Common.FixedArrays;");
 
 		System.out.println();
 
-		CodeGeneratorJava.printCommonImports(elementReference, elementClassname);
+		CodeGeneratorJava.printCommonImports();
 		
 		System.out.println("@SuppressWarnings(\"unused\")");
 		System.out.println("public class " + ledgerEntry.entryType + " {");

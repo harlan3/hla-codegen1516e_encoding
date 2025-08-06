@@ -30,7 +30,7 @@
         <javac srcdir="${src.dir}" destdir="${classes.dir}" source="17" target="17" debuglevel="${debuglevel}" includeantruntime="false">
             <classpath>
                 <pathelement path="${dist.dir}/hla_1516e_encoding.jar"/>
-                <pathelement path="C:\Users\harla\rtis_D39\lib\win64_vc++-14.0\rtis1516e.jar"/>
+                <pathelement path="C:\rtis_D39\lib\win64_vc++-14.0\rtis1516e.jar"/>
             </classpath>
         </javac>
     </target>

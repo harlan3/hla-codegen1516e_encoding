@@ -104,19 +104,11 @@ public class NullTerminatedGenerator {
 
 	public void printHeader(String elementClassname, ElementType elementType, LedgerEntry value) {
 
-		String elementReference = "";
-		
-		if (elementType == ElementType.Object) {
-			System.out.println("package " + Utilities.packageRoot + "Objects." + elementClassname + ".NullTerminatedArrays;");
-			elementReference = "Objects";
-		} else {
-			System.out.println("package " + Utilities.packageRoot + "Interactions." + elementClassname + ".NullTerminatedArrays;");
-			elementReference = "Interactions";
-		}
+		System.out.println("package " + Utilities.packageRoot + "Common.NullTerminatedArrays;");
 
 		System.out.println();
 
-		CodeGeneratorJava.printCommonImports(elementReference, elementClassname);
+		CodeGeneratorJava.printCommonImports();
 		
 		System.out.println("import java.util.Arrays;");
 		System.out.println();

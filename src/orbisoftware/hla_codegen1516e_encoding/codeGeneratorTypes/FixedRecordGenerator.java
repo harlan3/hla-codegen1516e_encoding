@@ -115,19 +115,11 @@ public class FixedRecordGenerator {
 
 	public void printHeader(String elementClassName, ElementType elementType) {
 
-		String elementReference = "";
-		
-		if (elementType == ElementType.Object) {
-			System.out.println("package " + Utilities.packageRoot + "Objects." + elementClassName + ".FixedRecords;");
-			elementReference = "Objects";
-		} else {
-			System.out.println("package " + Utilities.packageRoot + "Interactions." + elementClassName + ".FixedRecords;");
-			elementReference = "Interactions";
-		}
 
+		System.out.println("package " + Utilities.packageRoot + "Common.FixedRecords;");
 		System.out.println();
 
-		CodeGeneratorJava.printCommonImports(elementReference, elementClassName);
+		CodeGeneratorJava.printCommonImports();
 		
 		System.out.println("@SuppressWarnings(\"unused\")");
 		System.out.println("public class " + ledgerEntry.entryType + " {");

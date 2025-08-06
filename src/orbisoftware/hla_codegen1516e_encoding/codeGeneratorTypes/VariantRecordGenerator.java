@@ -134,20 +134,12 @@ public class VariantRecordGenerator {
 	}
 
 	public void printHeader(String elementClassname, ElementType elementType) {
-
-		String elementReference = "";
 		
-		if (elementType == ElementType.Object) {
-			System.out.println("package " + Utilities.packageRoot + "Objects." + elementClassname + ".VariantRecords;");
-			elementReference = "Objects";
-		} else {
-			System.out.println("package " + Utilities.packageRoot + "Interactions." + elementClassname + ".VariantRecords;");
-			elementReference = "Interactions";
-		}
+		System.out.println("package " + Utilities.packageRoot + "Common.VariantRecords;");
 
 		System.out.println();
 
-		CodeGeneratorJava.printCommonImports(elementReference, elementClassname);
+		CodeGeneratorJava.printCommonImports();
 		
 		System.out.println("@SuppressWarnings(\"unused\")");
 		System.out.println("public class " + ledgerEntry.entryType + " {");

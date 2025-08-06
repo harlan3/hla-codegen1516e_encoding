@@ -103,7 +103,7 @@ public class PaddingArrayGenerator {
 
 	public void printHeader(String elementClassname, ElementType elementType, LedgerEntry value) {
 		
-		System.out.println("package " + Utilities.packageRoot + "Misc;");
+		System.out.println("package " + Utilities.packageRoot + "Common.Misc;");
 		
 		System.out.println();
 

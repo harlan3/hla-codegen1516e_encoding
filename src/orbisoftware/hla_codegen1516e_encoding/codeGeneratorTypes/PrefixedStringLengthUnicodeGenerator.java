@@ -106,17 +106,11 @@ public class PrefixedStringLengthUnicodeGenerator {
 		
 		String elementReference = "";
 		
-		if (elementType == ElementType.Object) {
-			System.out.println("package " + Utilities.packageRoot + "Objects." + elementClassname + ".PrefixedStringLength;");
-			elementReference = "Objects";
-		} else {
-			System.out.println("package " + Utilities.packageRoot + "Interactions." + elementClassname + ".PrefixedStringLength;");
-			elementReference = "Interactions";
-		}
+		System.out.println("package " + Utilities.packageRoot + "Common.PrefixedStringLength;");
 
 		System.out.println();
 
-		CodeGeneratorJava.printCommonImports(elementReference, elementClassname);
+		CodeGeneratorJava.printCommonImports();
 		
 		System.out.println(indentFormat + "import java.io.UnsupportedEncodingException;");
 		System.out.println(indentFormat + "import java.nio.charset.StandardCharsets;");

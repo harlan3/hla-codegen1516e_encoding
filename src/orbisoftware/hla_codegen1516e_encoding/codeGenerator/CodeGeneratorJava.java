@@ -92,16 +92,20 @@ public class CodeGeneratorJava {
 			File codeGenIntDir = new File(
 					System.getProperty("user.dir") + File.separator + code_gen_dir + File.separator + 
 					Utilities.packageRootDir + File.separator + "Interactions");
-
+			File commonDir = new File(
+					System.getProperty("user.dir") + File.separator + code_gen_dir + File.separator + 
+					Utilities.packageRootDir + File.separator + "Common");
+			
 			if (Files.exists(codegenDir.toPath()))
 				FileUtils.forceDelete(codegenDir);
 
 			FileUtils.forceMkdir(codegenDir);
 			FileUtils.forceMkdir(codeGenObjDir);
 			FileUtils.forceMkdir(codeGenIntDir);
+			FileUtils.forceMkdir(commonDir);
 			
 			final String enumsString = code_gen_dir + File.separator + Utilities.packageRootDir + 
-					File.separator + "Enums";
+					File.separator + "Common" + File.separator + "Enums";
 			File enumsDir = new File(System.getProperty("user.dir") + File.separator + enumsString);
 
 			if (Files.exists(enumsDir.toPath()))
@@ -110,7 +114,7 @@ public class CodeGeneratorJava {
 			FileUtils.forceMkdir(enumsDir);
 
 			final String miscString = code_gen_dir + File.separator + Utilities.packageRootDir +
-					File.separator + "Misc";
+					File.separator  + "Common" + File.separator + "Misc";
 			File miscDir = new File(System.getProperty("user.dir") + File.separator + miscString);
 
 			if (Files.exists(miscDir.toPath()))
@@ -139,28 +143,26 @@ public class CodeGeneratorJava {
 		System.out.println("import java.util.Map;");
 		System.out.println("import java.util.HashMap;");
 		System.out.println();
-		CodeGeneratorJava.printCommonImports(elementReference, elementName);
+		CodeGeneratorJava.printCommonImports();
 	}
 	
-	public static void printCommonImports(String elementReference, String elementName) {
+	public static void printCommonImports() {
 		
 		System.out.println("import hla.rti1516e.*;");
 		System.out.println("import hla.rti1516e.encoding.*;");
+		System.out.println("import orbisoftware.hla_shared.*;");
 		System.out.println("");
 		
-		System.out.println("import " + Utilities.sharedRoot);
-		System.out.println("import " + Utilities.packageRoot + "Enums.*;");
-		System.out.println("import " + Utilities.packageRoot + "Misc.*;");
-		System.out.println("import " + Utilities.packageRoot + elementReference + "." + elementName + ".FixedArrays.*;");
-		System.out.println("import " + Utilities.packageRoot + elementReference + "." + elementName + ".FixedRecords.*;");
-		System.out.println("import " + Utilities.packageRoot + elementReference + "." + elementName + ".LengthlessArrays.*;");
-		System.out.println("import " + Utilities.packageRoot + elementReference + "." + elementName + ".NullTerminatedArrays.*;");
-		System.out.println("import " + Utilities.packageRoot + elementReference + "." + elementName + ".PrefixedStringLength.*;");
-		System.out.println("import " + Utilities.packageRoot + elementReference + "." + elementName + ".VariableArrays.*;");
-		System.out.println("import " + Utilities.packageRoot + elementReference + "." + elementName + ".VariantRecords.*;");
-		System.out.println();
+		System.out.println("import " + Utilities.packageRoot + "Common.Enums.*;");
+		System.out.println("import " + Utilities.packageRoot + "Common.FixedArrays.*;");
+		System.out.println("import " + Utilities.packageRoot + "Common.FixedRecords.*;");
+		System.out.println("import " + Utilities.packageRoot + "Common.LengthlessArrays.*;");
+		System.out.println("import " + Utilities.packageRoot + "Common.NullTerminatedArrays.*;");
+		System.out.println("import " + Utilities.packageRoot + "Common.PrefixedStringLength.*;");
+		System.out.println("import " + Utilities.packageRoot + "Common.VariableArrays.*;");
+		System.out.println("import " + Utilities.packageRoot + "Common.VariantRecords.*;");
+		System.out.println("import " + Utilities.packageRoot + "Common.Misc.*;");
 		
-		System.out.println("import orbisoftware.hla_shared.*;");
 		System.out.println();
 	}
 
@@ -605,60 +607,10 @@ public class CodeGeneratorJava {
 		depthDecSpace();
 	}
 	
-	public void generateImportDirectories(ElementType elementType, String elementName) {
-
-		try {		
-			final String fixedArraysString = "codegen_java" + File.separator + Utilities.packageRootDir +
-					File.separator + elementType.toString() +
-					"s" + File.separator + elementName + File.separator + "FixedArrays";
-			File fixedArraysDir = new File(System.getProperty("user.dir") + File.separator + fixedArraysString);
-			FileUtils.forceMkdir(fixedArraysDir);
-			
-			final String fixedRecordsString = "codegen_java" + File.separator + Utilities.packageRootDir + 
-					File.separator + elementType.toString() +
-					"s" + File.separator + elementName + File.separator + "FixedRecords";
-			File fixedRecordsDir = new File(System.getProperty("user.dir") + File.separator + fixedRecordsString);
-			FileUtils.forceMkdir(fixedRecordsDir);
-			
-			final String lengthlessString = "codegen_java" + File.separator + Utilities.packageRootDir + 
-					File.separator + elementType.toString() +
-					"s" + File.separator + elementName + File.separator + "LengthlessArrays";
-			File lengthlessArraysDir = new File(System.getProperty("user.dir") + File.separator + lengthlessString);
-			FileUtils.forceMkdir(lengthlessArraysDir);
-			
-			final String nullTerminatedString = "codegen_java" + File.separator + Utilities.packageRootDir +
-					File.separator + elementType.toString() +
-					"s" + File.separator + elementName + File.separator + "NullTerminatedArrays";
-			File nullTerminatedDir = new File(System.getProperty("user.dir") + File.separator + nullTerminatedString);
-			FileUtils.forceMkdir(nullTerminatedDir);
-			
-			final String prefixedStringLengthString = "codegen_java" + File.separator + Utilities.packageRootDir +
-					File.separator + elementType.toString() +
-					"s" + File.separator + elementName + File.separator + "PrefixedStringLength";
-			File prefixedStringLengthDir = new File(System.getProperty("user.dir") + File.separator + prefixedStringLengthString);
-			FileUtils.forceMkdir(prefixedStringLengthDir);
-			
-			final String variableArraysString = "codegen_java" + File.separator + Utilities.packageRootDir +
-					File.separator + elementType.toString() + 
-					"s" + File.separator + elementName + File.separator + "VariableArrays";
-			File variableArraysDir = new File(System.getProperty("user.dir") + File.separator + variableArraysString);
-			FileUtils.forceMkdir(variableArraysDir);
-			
-			final String variantRecordsString = "codegen_java" + File.separator + Utilities.packageRootDir +
-					File.separator + elementType.toString() +
-					"s" + File.separator + elementName + File.separator + "VariantRecords";
-			File variantRecordsDir = new File(System.getProperty("user.dir") + File.separator + variantRecordsString);
-			FileUtils.forceMkdir(variantRecordsDir);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
 	public void generateEnumPlaceHolderFile() {
 
 		try {
-			final String generatedTypeString = "codegen_java" + File.separator + Utilities.packageRootDir + File.separator + "Enums";
+			final String generatedTypeString = "codegen_java" + File.separator + Utilities.packageRootDir + File.separator + "Common" + File.separator + "Enums";
 			File generatedTypeDir = new File(System.getProperty("user.dir") + File.separator + generatedTypeString);
 
 			PrintStream outputStream = new PrintStream(
@@ -666,7 +618,7 @@ public class CodeGeneratorJava {
 			PrintStream console = System.out;
 			System.setOut(outputStream);
 			
-			System.out.println("package " + Utilities.packageRoot + "Enums;");
+			System.out.println("package " + Utilities.packageRoot + "Common.Enums;");
 			System.out.println();
 			System.out.println("public class PlaceHolderEnums {");
 			System.out.println();
@@ -684,7 +636,7 @@ public class CodeGeneratorJava {
 	public void generateMiscPlaceHolderFile() {
 
 		try {
-			final String generatedTypeString = "codegen_java" + File.separator + Utilities.packageRootDir + File.separator + "Misc";
+			final String generatedTypeString = "codegen_java" + File.separator + Utilities.packageRootDir + File.separator + "Common" + File.separator + "Misc";
 			File generatedTypeDir = new File(System.getProperty("user.dir") + File.separator + generatedTypeString);
 
 			PrintStream outputStream = new PrintStream(
@@ -692,7 +644,7 @@ public class CodeGeneratorJava {
 			PrintStream console = System.out;
 			System.setOut(outputStream);
 			
-			System.out.println("package " + Utilities.packageRoot + "Misc;");
+			System.out.println("package " + Utilities.packageRoot + "Common.Misc;");
 			System.out.println();
 			System.out.println("public class PlaceHolderMisc {");
 			System.out.println();
@@ -707,12 +659,12 @@ public class CodeGeneratorJava {
 		}
 	}
 	
-	void generatePlaceHolderFiles(ElementType elementType, String elementName, String generatedType) {
+	void generatePlaceHolderFiles(String generatedType) {
 
 		try {
 			// Fixed Record
 			final String generatedTypeString = "codegen_java" + File.separator + Utilities.packageRootDir + File.separator +
-					elementType.toString() + "s" + File.separator + elementName + File.separator + generatedType;
+					"Common" + File.separator + generatedType;
 			File generatedTypeDir = new File(System.getProperty("user.dir") + File.separator + generatedTypeString);
 
 			PrintStream outputStream = new PrintStream(
@@ -720,7 +672,7 @@ public class CodeGeneratorJava {
 			PrintStream console = System.out;
 			System.setOut(outputStream);
 			
-			System.out.println("package " + Utilities.packageRoot + elementType.toString() + "s." + elementName + "." + generatedType + ";");
+			System.out.println("package " + Utilities.packageRoot + "Common." + generatedType + ";");
 			System.out.println();
 			System.out.println("public class PlaceHolder" + generatedType + " {");
 			System.out.println();
@@ -751,7 +703,34 @@ public class CodeGeneratorJava {
 					System.getProperty("user.dir") + File.separator + code_gen_dir + File.separator + Utilities.packageRootDir + File.separator + "Objects");
 			File codeGenIntDir = new File(
 					System.getProperty("user.dir") + File.separator + code_gen_dir + File.separator + Utilities.packageRootDir + File.separator + "Interactions");
-
+			File commonDir = new File(
+					System.getProperty("user.dir") + File.separator + code_gen_dir + File.separator + Utilities.packageRootDir + File.separator + "Common");
+			
+			File codegenFixedArraysDir = new File(commonDir + File.separator + "FixedArrays");
+			File codegenFixedRecordsDir = new File(commonDir + File.separator + "FixedRecords");
+			File codegenLengthlessArraysDir = new File(commonDir + File.separator + "LengthlessArrays");
+			File codegenNullTerminatedArraysDir = new File(commonDir + File.separator + "NullTerminatedArrays");
+			File codegenPrefixedStringLengthDir = new File(commonDir + File.separator + "PrefixedStringLength");
+			File codegenVariableArraysDir = new File(commonDir + File.separator + "VariableArrays");
+			File codegenVariantRecordsDir = new File(commonDir + File.separator + "VariantRecords");
+			
+			FileUtils.forceMkdir(codegenFixedArraysDir);
+			FileUtils.forceMkdir(codegenFixedRecordsDir);
+			FileUtils.forceMkdir(codegenLengthlessArraysDir);
+			FileUtils.forceMkdir(codegenNullTerminatedArraysDir);
+			FileUtils.forceMkdir(codegenPrefixedStringLengthDir);
+			FileUtils.forceMkdir(codegenVariableArraysDir);
+			FileUtils.forceMkdir(codegenVariantRecordsDir);
+			
+			// Generate placeholder files
+			generatePlaceHolderFiles("FixedArrays");
+			generatePlaceHolderFiles("FixedRecords");
+			generatePlaceHolderFiles("LengthlessArrays");
+			generatePlaceHolderFiles("NullTerminatedArrays");
+			generatePlaceHolderFiles("PrefixedStringLength");
+			generatePlaceHolderFiles("VariableArrays");
+			generatePlaceHolderFiles("VariantRecords");
+			
 			for (int i = 0; i < objectArraySize; i++) {
 
 				Utils utils = new Utils();
@@ -941,18 +920,6 @@ public class CodeGeneratorJava {
 				// Populate ledger
 				populateNonBasicTypeLedger(node);
 				
-				// Generate import directories
-				generateImportDirectories(ElementType.Object, mmNodeTreeRepository.getObjectName(i));
-				
-				// Generate placeholder files
-				generatePlaceHolderFiles(ElementType.Object, mmNodeTreeRepository.getObjectName(i), "FixedArrays");
-				generatePlaceHolderFiles(ElementType.Object, mmNodeTreeRepository.getObjectName(i), "FixedRecords");
-				generatePlaceHolderFiles(ElementType.Object, mmNodeTreeRepository.getObjectName(i), "LengthlessArrays");
-				generatePlaceHolderFiles(ElementType.Object, mmNodeTreeRepository.getObjectName(i), "NullTerminatedArrays");
-				generatePlaceHolderFiles(ElementType.Object, mmNodeTreeRepository.getObjectName(i), "PrefixedStringLength");
-				generatePlaceHolderFiles(ElementType.Object, mmNodeTreeRepository.getObjectName(i), "VariableArrays");
-				generatePlaceHolderFiles(ElementType.Object, mmNodeTreeRepository.getObjectName(i), "VariantRecords");
-				
 				node = doc4.getFirstChild();
 				generateElementNonBasics.generateClasses(node, ElementType.Object, mmNodeTreeRepository.getObjectName(i));
 				//NonBasicTypeLedger.getInstance().displayLedger();
@@ -1128,18 +1095,6 @@ public class CodeGeneratorJava {
 				
 				// Populate ledger
 				populateNonBasicTypeLedger(node);
-				
-				// Generate import directories
-				generateImportDirectories(ElementType.Interaction, mmNodeTreeRepository.getInteractionName(i));
-				
-				// Generate placeholder files
-				generatePlaceHolderFiles(ElementType.Interaction, mmNodeTreeRepository.getInteractionName(i), "FixedArrays");
-				generatePlaceHolderFiles(ElementType.Interaction, mmNodeTreeRepository.getInteractionName(i), "FixedRecords");
-				generatePlaceHolderFiles(ElementType.Interaction, mmNodeTreeRepository.getInteractionName(i), "LengthlessArrays");
-				generatePlaceHolderFiles(ElementType.Interaction, mmNodeTreeRepository.getInteractionName(i), "NullTerminatedArrays");
-				generatePlaceHolderFiles(ElementType.Interaction, mmNodeTreeRepository.getInteractionName(i), "PrefixedStringLength");
-				generatePlaceHolderFiles(ElementType.Interaction, mmNodeTreeRepository.getInteractionName(i), "VariableArrays");
-				generatePlaceHolderFiles(ElementType.Interaction, mmNodeTreeRepository.getInteractionName(i), "VariantRecords");
 				
 				node = doc4.getFirstChild();
 				generateElementNonBasics.generateClasses(node, ElementType.Interaction, mmNodeTreeRepository.getInteractionName(i));

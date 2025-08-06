@@ -78,7 +78,7 @@ public class EnumeratedTypeGenerator {
 
 		try {
 			
-			final String enumsString = "codegen_java" + File.separator + Utilities.packageRootDir + File.separator + "Enums";
+			final String enumsString = "codegen_java" + File.separator + Utilities.packageRootDir + File.separator + "Common" + File.separator + "Enums";
 			File enumsDir = new File(System.getProperty("user.dir") + File.separator + enumsString);
 			
 			// Select all enumerated data types
@@ -95,7 +95,7 @@ public class EnumeratedTypeGenerator {
 				PrintStream console = System.out;
 				System.setOut(outputStream);
 
-				System.out.println("package " + Utilities.packageRoot + "Enums;");
+				System.out.println("package " + Utilities.packageRoot + "Common.Enums;");
 	    		System.out.println();
 	    		
 				System.out.println("import " + Utilities.sharedRoot);
