@@ -91,7 +91,7 @@ public class EnumeratedTypeGenerator {
 			for (DbEnumeratedDatatype var1 : list1) {
 
 				PrintStream outputStream =
-						new PrintStream(new File(enumsDir + File.separator + var1.name + ".java"));
+						new PrintStream(new File(enumsDir + File.separator + var1.name + "_Encode.java"));
 				PrintStream console = System.out;
 				System.setOut(outputStream);
 
@@ -101,11 +101,11 @@ public class EnumeratedTypeGenerator {
 				System.out.println("import " + Utilities.sharedRoot);
 				System.out.println();
 				
-				System.out.println("public class " + var1.name + " {");
+				System.out.println("public class " + var1.name + "_Encode {");
 				System.out.println();
 
 				System.out.println("   // Constructor");
-				System.out.println("   public " + var1.name + "() {");
+				System.out.println("   public " + var1.name + "_Encode() {");
 				System.out.println();
 				System.out.println("   }");
 				System.out.println();

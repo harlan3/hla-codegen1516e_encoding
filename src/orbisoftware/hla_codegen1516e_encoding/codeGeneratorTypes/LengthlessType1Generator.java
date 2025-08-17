@@ -112,14 +112,14 @@ public class LengthlessType1Generator {
 		System.out.println();
 		
 		System.out.println("@SuppressWarnings(\"unused\")");
-		System.out.println("public class " + ledgerEntry.entryType + " {");
+		System.out.println("public class " + ledgerEntry.entryType + "_Encode {");
 		System.out.println();
 		depthIncSpace();
 		System.out.println(indentFormat + "private Utilities utilities = new Utilities();");
 		System.out.println();
 		
 		System.out.println(indentFormat + "// Constructor");
-		System.out.println(indentFormat + "public " + ledgerEntry.entryType + "()" + " {");
+		System.out.println(indentFormat + "public " + ledgerEntry.entryType + "_Encode()" + " {");
 		System.out.println();
 		
 		System.out.println(indentFormat + "}");

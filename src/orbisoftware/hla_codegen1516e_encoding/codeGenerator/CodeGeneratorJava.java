@@ -302,13 +302,13 @@ public class CodeGeneratorJava {
 
 				System.out.println();
 				System.out.println(indentFormat + "// Class Variable");
-				System.out.println(indentFormat + "private " + nodeSplit[0] + " " + dataFieldName + " = new " + nodeSplit[0] + "();");
+				System.out.println(indentFormat + "private " + nodeSplit[0] + "_Encode " + dataFieldName + " = new " + nodeSplit[0] + "_Encode();");
 				System.out.println();
 				
 				// Setter implementation
 				System.out.println(indentFormat + "// Setter");
 				System.out.println(indentFormat + "public void set" + nodeSplit[1] + "(" +
-						nodeSplit[0] + " " + dataFieldName + ") {");
+						nodeSplit[0] + "_Encode " + dataFieldName + ") {");
 				depthIncSpace();
 
 				System.out.println(indentFormat + "this." + dataFieldName + " = " + dataFieldName + ";");
@@ -318,7 +318,7 @@ public class CodeGeneratorJava {
 				
 				// Getter implementation
 				System.out.println(indentFormat + "// Getter");
-				System.out.println(indentFormat + "public " + nodeSplit[0] + " get" + nodeSplit[1] + "() {");
+				System.out.println(indentFormat + "public " + nodeSplit[0] + "_Encode get" + nodeSplit[1] + "() {");
 				depthIncSpace();
 				System.out.println(indentFormat + "return " + dataFieldName + ";");
 				depthDecSpace();

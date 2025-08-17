@@ -120,15 +120,15 @@ public class FixedArrayType2Generator {
 		CodeGeneratorJava.printCommonImports();
 		
 		System.out.println("@SuppressWarnings(\"unused\")");
-		System.out.println("public class " + ledgerEntry.entryType + " {");
+		System.out.println("public class " + ledgerEntry.entryType + "_Encode {");
 		
 		depthIncSpace();
 		
 		String nativeClass = ledgerEntry.entryClassType;
 		
 		System.out.println();
-		System.out.println(indentFormat + "private " + nativeClass + "[] internalClassRepresentation = new " + 
-				nativeClass + "[" + ledgerEntry.entryCardinality + "];");
+		System.out.println(indentFormat + "private " + nativeClass + "_Encode[] internalClassRepresentation = new " + 
+				nativeClass + "_Encode[" + ledgerEntry.entryCardinality + "];");
 		System.out.println();
 		System.out.println(indentFormat + "public int sizeOfValue() {");
 		System.out.println();
@@ -140,7 +140,7 @@ public class FixedArrayType2Generator {
 		System.out.println(indentFormat + "public int cardinality = " + ledgerEntry.entryCardinality + ";");
 		System.out.println();
 		System.out.println(indentFormat + "// Constructor");
-		System.out.println(indentFormat + "public " + ledgerEntry.entryType + "()" + " {");
+		System.out.println(indentFormat + "public " + ledgerEntry.entryType + "_Encode()" + " {");
 		System.out.println();
 		
 		depthIncSpace();
@@ -149,7 +149,7 @@ public class FixedArrayType2Generator {
 		
 		depthIncSpace();
 		
-		System.out.println(indentFormat + "internalClassRepresentation[i] = new " + nativeClass + "();");
+		System.out.println(indentFormat + "internalClassRepresentation[i] = new " + nativeClass + "_Encode();");
 		
 		depthDecSpace();
 		depthDecSpace();
@@ -167,8 +167,8 @@ public class FixedArrayType2Generator {
 		String variableName = utils.convertToCamelCase(nativeClass);
 		
 		System.out.println(indentFormat + "// Setter");
-		System.out.println(indentFormat + "public void set" + nativeClass + "(int index, " +
-				nativeClass + " " + variableName + ") {");
+		System.out.println(indentFormat + "public void set" + nativeClass + "_Encode(int index, " +
+				nativeClass + "_Encode " + variableName + ") {");
 		System.out.println();
 		
 		depthIncSpace();
@@ -180,8 +180,8 @@ public class FixedArrayType2Generator {
 		
 		System.out.println();
 		System.out.println(indentFormat + "// Getter");
-		System.out.println(indentFormat + "public " + nativeClass + " get" + nativeClass + 
-				"(int index) {");
+		System.out.println(indentFormat + "public " + nativeClass + "_Encode get" + nativeClass + 
+				"_Encode(int index) {");
 		depthIncSpace();
 		System.out.println();
 		System.out.println(indentFormat + "return internalClassRepresentation[index];");
@@ -202,7 +202,7 @@ public class FixedArrayType2Generator {
 		depthIncSpace();
 		System.out.println(indentFormat + "// Determine the number of bytes for an element");
 		System.out.println(indentFormat + "DynamicBuffer tmpBuffer = new DynamicBuffer();");
-		System.out.println(indentFormat + "new " + nativeClass + "().encode(tmpBuffer, alignment);");
+		System.out.println(indentFormat + "new " + nativeClass + "_Encode().encode(tmpBuffer, alignment);");
 		System.out.println(indentFormat + "int elementSize = tmpBuffer.position();");
 		System.out.println();
 		System.out.println(indentFormat +"return elementSize;");

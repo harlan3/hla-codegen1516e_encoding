@@ -124,7 +124,7 @@ public class PrefixedStringLengthGenerator {
 		System.out.println();
 		
 		System.out.println(indentFormat + "// Constructor");
-		System.out.println(indentFormat + "public " + ledgerEntry.entryType + "()" + " {");
+		System.out.println(indentFormat + "public " + ledgerEntry.entryType + "_Encode()" + " {");
 		System.out.println();
 		
 		System.out.println(indentFormat + "}");

@@ -114,7 +114,7 @@ public class VariableArrayType2Generator {
 		System.out.println();
 		
 		System.out.println("@SuppressWarnings(\"unused\")");
-		System.out.println("public class " + ledgerEntry.entryType + " {");
+		System.out.println("public class " + ledgerEntry.entryType + "_Encode {");
 		System.out.println();
 		
 		depthIncSpace();
@@ -123,7 +123,7 @@ public class VariableArrayType2Generator {
 		System.out.println();
 		
 		System.out.println(indentFormat + "// Constructor");
-		System.out.println(indentFormat + "public " + ledgerEntry.entryType + "()" + " {");
+		System.out.println(indentFormat + "public " + ledgerEntry.entryType + "_Encode()" + " {");
 		System.out.println();
 		
 		System.out.println(indentFormat + "}");
@@ -141,7 +141,7 @@ public class VariableArrayType2Generator {
 		System.out.println();
 		System.out.println(indentFormat + "// Class " + nativeClass);
 		System.out.println(indentFormat + "private ArrayList<" + nativeClass +
-				"> internalClassRepresentation = new ArrayList<" + nativeClass + ">();");
+				"_Encode> internalClassRepresentation = new ArrayList<" + nativeClass + "_Encode>();");
 		System.out.println();
 		System.out.println(indentFormat + "public int sizeOfValue() {");
 		System.out.println();
@@ -153,7 +153,7 @@ public class VariableArrayType2Generator {
 		
 		System.out.println(indentFormat + "// Setter");
 		System.out.println(indentFormat + "public void set" + nativeClass + "(int index, " +
-				nativeClass + " " + variableName + ") {");
+				nativeClass + "_Encode " + variableName + ") {");
 		System.out.println();
 		
 		depthIncSpace();
@@ -165,7 +165,7 @@ public class VariableArrayType2Generator {
 		
 		System.out.println();
 		System.out.println(indentFormat + "// Getter");
-		System.out.println(indentFormat + "public " + nativeClass + " get" + nativeClass + "(int index) {");
+		System.out.println(indentFormat + "public " + nativeClass + "_Encode get" + nativeClass + "(int index) {");
 		depthIncSpace();
 		System.out.println();
 		System.out.println(indentFormat + "return internalClassRepresentation.get(index);");
@@ -187,7 +187,7 @@ public class VariableArrayType2Generator {
 		depthIncSpace();
 		System.out.println(indentFormat + "// Determine the number of bytes for an element");
 		System.out.println(indentFormat + "DynamicBuffer tmpBuffer = new DynamicBuffer();");
-		System.out.println(indentFormat + "new " + nativeClass + "().encode(tmpBuffer, alignment);");
+		System.out.println(indentFormat + "new " + nativeClass + "_Encode().encode(tmpBuffer, alignment);");
 		System.out.println(indentFormat + "int elementSize = tmpBuffer.position();");
 		System.out.println();
 		System.out.println(indentFormat +"return elementSize;");
@@ -256,7 +256,7 @@ public class VariableArrayType2Generator {
 		System.out.println(indentFormat + "tmpBuffer.rewind();");
 		System.out.println(indentFormat + "tmpBuffer.put(elementBytes);");
 		System.out.println(indentFormat + "tmpBuffer.rewind();");
-		System.out.println(indentFormat + "internalClassRepresentation.add(new " + nativeClass + "());");
+		System.out.println(indentFormat + "internalClassRepresentation.add(new " + nativeClass + "_Encode());");
 		System.out.println(indentFormat + "internalClassRepresentation.get(i).decode(tmpBuffer, alignment);");
 		depthDecSpace();
 		System.out.println(indentFormat + "}");

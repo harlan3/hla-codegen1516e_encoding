@@ -122,7 +122,7 @@ public class FixedRecordGenerator {
 		CodeGeneratorJava.printCommonImports();
 		
 		System.out.println("@SuppressWarnings(\"unused\")");
-		System.out.println("public class " + ledgerEntry.entryType + " {");
+		System.out.println("public class " + ledgerEntry.entryType + "_Encode {");
 		System.out.println();
 
 		depthIncSpace();
@@ -221,8 +221,8 @@ public class FixedRecordGenerator {
 			System.out.println();
 			System.out.println(indentFormat + "// Class Variable");
 			if (nonBasicType) {
-				System.out.println(indentFormat + "private " + ledgerEntry.entryType + " " + ledgerEntry.entryDataField + 
-						" = new " + ledgerEntry.entryType + "();");
+				System.out.println(indentFormat + "private " + ledgerEntry.entryType + "_Encode " + ledgerEntry.entryDataField + 
+						" = new " + ledgerEntry.entryType + "_Encode();");
 			} else {
 				System.out.println(indentFormat + "private " + ledgerEntry.entryType + " " + ledgerEntry.entryDataField + ";");
 			}
@@ -230,8 +230,13 @@ public class FixedRecordGenerator {
 
 			// Setter implementation
 			System.out.println(indentFormat + "// Setter");
-			System.out.println(indentFormat + "public void set" + utils.capitalizeFirstLetter(ledgerEntry.entryDataField) + "("
-					+ ledgerEntry.entryType + " " + ledgerEntry.entryDataField + ") {");
+			if (nonBasicType) {
+				System.out.println(indentFormat + "public void set" + utils.capitalizeFirstLetter(ledgerEntry.entryDataField) + "("
+					+ ledgerEntry.entryType + "_Encode " + ledgerEntry.entryDataField + ") {");
+			} else {
+				System.out.println(indentFormat + "public void set" + utils.capitalizeFirstLetter(ledgerEntry.entryDataField) + "("
+						+ ledgerEntry.entryType + " " + ledgerEntry.entryDataField + ") {");
+			}
 			depthIncSpace();
 			System.out.println(
 					indentFormat + "this." + ledgerEntry.entryDataField + " = " + ledgerEntry.entryDataField + ";");
@@ -241,8 +246,13 @@ public class FixedRecordGenerator {
 
 			// Getter implementation
 			System.out.println(indentFormat + "// Getter");
-			System.out.println(
+			if (nonBasicType) {
+				System.out.println(
+					indentFormat + "public " + ledgerEntry.entryType + "_Encode get" + utils.capitalizeFirstLetter(ledgerEntry.entryDataField)  + "() {");
+			} else {
+				System.out.println(
 					indentFormat + "public " + ledgerEntry.entryType + " get" + utils.capitalizeFirstLetter(ledgerEntry.entryDataField)  + "() {");
+			}
 			depthIncSpace();
 			System.out.println(indentFormat + "return " + ledgerEntry.entryDataField + ";");
 			depthDecSpace();

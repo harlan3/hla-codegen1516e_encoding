@@ -114,13 +114,13 @@ public class LengthlessType2Generator {
 		System.out.println();
 		
 		System.out.println("@SuppressWarnings(\"unused\")");
-		System.out.println("public class " + ledgerEntry.entryType + " {");
+		System.out.println("public class " + ledgerEntry.entryType + "_Encode {");
 		
 		depthIncSpace();
 		
 		System.out.println();
 		System.out.println(indentFormat + "// Constructor");
-		System.out.println(indentFormat + "public " + ledgerEntry.entryType + "()" + " {");
+		System.out.println(indentFormat + "public " + ledgerEntry.entryType + "_Encode()" + " {");
 		System.out.println();
 		
 		System.out.println(indentFormat + "}");
@@ -132,7 +132,7 @@ public class LengthlessType2Generator {
 		
 		System.out.println();
 		
-		String nativeClass = ledgerEntry.entryClassType;
+		String nativeClass = ledgerEntry.entryClassType + "_Encode";
 		String variableName = utils.convertToCamelCase(nativeClass);
 		
 		System.out.println(indentFormat + "// Class " + nativeClass);
@@ -180,7 +180,7 @@ public class LengthlessType2Generator {
 		depthIncSpace();
 		System.out.println(indentFormat + "// Determine the number of bytes for an element");
 		System.out.println(indentFormat + "DynamicBuffer tmpBuffer = new DynamicBuffer();");
-		System.out.println(indentFormat + "new " + nativeClass + "().encode(tmpBuffer, alignment);");
+		System.out.println(indentFormat + "new " + nativeClass + "_Encode().encode(tmpBuffer, alignment);");
 		System.out.println(indentFormat + "int elementSize = tmpBuffer.position();");
 		System.out.println();
 		System.out.println(indentFormat +"return elementSize;");
@@ -240,7 +240,7 @@ public class LengthlessType2Generator {
 		System.out.println(indentFormat + "tmpBuffer.rewind();");
 		System.out.println(indentFormat + "tmpBuffer.put(elementBytes);");
 		System.out.println(indentFormat + "tmpBuffer.rewind();");
-		System.out.println(indentFormat + "internalClassRepresentation.add(new " + nativeClass + "());");
+		System.out.println(indentFormat + "internalClassRepresentation.add(new " + nativeClass + "_Encode());");
 		System.out.println(indentFormat + "internalClassRepresentation.get(i).decode(tmpBuffer, alignment);");
 		depthDecSpace();
 		System.out.println(indentFormat + "}");
