@@ -121,7 +121,7 @@ public class PrefixedStringLengthUnicodeGenerator {
 		System.out.println(indentFormat + "// HLAunicodeString has a size prefix containing the length of the string, where each letter is two bytes");
 		
 		System.out.println(indentFormat + "@SuppressWarnings(\"unused\")");
-		System.out.println(indentFormat + "public class " + ledgerEntry.entryType + " {");
+		System.out.println(indentFormat + "public class " + ledgerEntry.entryType + "_Encode" + " {");
 		System.out.println();
 		
 		depthIncSpace();

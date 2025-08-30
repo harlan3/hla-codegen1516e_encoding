@@ -116,7 +116,7 @@ public class PrefixedStringLengthGenerator {
 		System.out.println(indentFormat + "// HLAASCIIstringImp has a size prefix containing the length of the string");
 		
 		System.out.println(indentFormat + "@SuppressWarnings(\"unused\")");
-		System.out.println(indentFormat + "public class " + ledgerEntry.entryType + " {");
+		System.out.println(indentFormat + "public class " + ledgerEntry.entryType + "_Encode" + " {");
 		System.out.println();
 		
 		depthIncSpace();
