@@ -187,6 +187,7 @@ public class VariableArrayType2Generator {
 		depthIncSpace();
 		System.out.println(indentFormat + "// Determine the number of bytes for an element");
 		System.out.println(indentFormat + "DynamicBuffer tmpBuffer = new DynamicBuffer();");
+		System.out.println(indentFormat + "tmpBuffer.put(utilities.getBytesFromInteger(internalClassRepresentation.size()));");
 		System.out.println(indentFormat + "new " + nativeClass + "_Encode().encode(tmpBuffer, alignment);");
 		System.out.println(indentFormat + "int elementSize = tmpBuffer.position();");
 		System.out.println();
