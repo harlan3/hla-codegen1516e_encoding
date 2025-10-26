@@ -228,6 +228,8 @@ public class PaddingArrayGenerator {
 		System.out.println(indentFormat + "byte[] elementBytes = new byte[elementSize];");
 		System.out.println(indentFormat + "int numElements = buffer.getWrittenBytes().length / elementSize;");
 		System.out.println();
+		System.out.println(indentFormat + "internalClassRepresentation.clear();");
+		System.out.println();
 		System.out.println(indentFormat + "for (int i=0; i < numElements; i++) {");
 		System.out.println();
 		depthIncSpace();

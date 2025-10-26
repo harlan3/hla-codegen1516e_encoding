@@ -198,6 +198,8 @@ public class PrefixedStringLengthGenerator {
 		System.out.println(indentFormat + "buffer.get(sizeBytes);");
 		System.out.println(indentFormat + "int numElements = utilities.getIntegerFromBytes(sizeBytes);");
 		System.out.println();
+		System.out.println(indentFormat + "internalClassRepresentation.clear();");
+		System.out.println();
 		System.out.println(indentFormat + "byte[] stringBytes = new byte[numElements];");
 		System.out.println(indentFormat + "buffer.get(stringBytes);");
 		System.out.println();

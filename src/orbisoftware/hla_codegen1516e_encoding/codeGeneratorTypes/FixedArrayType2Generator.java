@@ -226,7 +226,6 @@ public class FixedArrayType2Generator {
 		System.out.println(indentFormat + "DynamicBuffer tmpBuffer = new DynamicBuffer();");
 		System.out.println(indentFormat + "byte[] elementBytes = new byte[elementSize];");
 		System.out.println();
-		
 		System.out.println(indentFormat + "for (int i=0; i < cardinality; i++) {");
 		System.out.println();
 		depthIncSpace();

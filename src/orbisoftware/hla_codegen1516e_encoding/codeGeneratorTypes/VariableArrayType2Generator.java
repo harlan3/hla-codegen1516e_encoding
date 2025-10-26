@@ -243,7 +243,8 @@ public class VariableArrayType2Generator {
 		System.out.println(indentFormat + "byte[] sizeBytes = new byte[Integer.BYTES];");
 		System.out.println(indentFormat + "byte[] elementBytes = new byte[elementSize];");
 		System.out.println();
-		
+		System.out.println(indentFormat + "internalClassRepresentation.clear();");
+		System.out.println();
 		System.out.println(indentFormat + "buffer.rewind();");
 		System.out.println(indentFormat + "buffer.get(sizeBytes);");
 		System.out.println(indentFormat + "int numElements = utilities.getIntegerFromBytes(sizeBytes);");
