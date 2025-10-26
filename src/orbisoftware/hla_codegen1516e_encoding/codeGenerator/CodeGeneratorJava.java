@@ -255,6 +255,9 @@ public class CodeGeneratorJava {
 					ledgerEntry.entryClassType = attributes.getNamedItem("classtype").toString().replaceAll("classtype=\"", "").replaceAll("\"", "");
 					ledgerEntry.entryCardinality = attributes.getNamedItem("cardinality").toString().replaceAll("cardinality=\"", "").replaceAll("\"", "");
 					ledgerEntry.entryEncoding = attributes.getNamedItem("encoding").toString().replaceAll("encoding=\"", "").replaceAll("\"", "");
+					
+					if (ledgerEntry.entryCardinality.equals("") || ledgerEntry.entryCardinality.equals("0"))
+						ledgerEntry.entryCardinality = "1";	 // Backstop cardinality value of 1
 				}
 				
 				NonBasicTypeLedger.getInstance().nonBasicTypeLedger.put(ledgerEntry.entryID, ledgerEntry);
