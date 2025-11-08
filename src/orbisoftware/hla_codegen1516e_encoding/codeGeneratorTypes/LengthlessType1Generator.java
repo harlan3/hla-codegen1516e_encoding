@@ -116,8 +116,8 @@ public class LengthlessType1Generator {
 		System.out.println();
 		depthIncSpace();
 		System.out.println(indentFormat + "private Utilities utilities = new Utilities();");
+		System.out.println(indentFormat + "private int sizeHint = 0;");
 		System.out.println();
-		
 		System.out.println(indentFormat + "// Constructor");
 		System.out.println(indentFormat + "public " + ledgerEntry.entryType + "_Encode()" + " {");
 		System.out.println();
@@ -153,17 +153,29 @@ public class LengthlessType1Generator {
 		System.out.println(indentFormat + "}");
 		System.out.println();
 		System.out.println(indentFormat + "// Setter");
+		System.out.println(indentFormat + "public void setSizeHint(int sizeHint) {");
+		System.out.println();
+		depthIncSpace();
+		System.out.println(indentFormat + "this.sizeHint = sizeHint;");
+		depthDecSpace();
+		System.out.println(indentFormat + "}");
+		System.out.println();
+		System.out.println(indentFormat + "// Getter");
+		System.out.println(indentFormat + "public int getSizeHint() {");
+		System.out.println();
+		depthIncSpace();
+		System.out.println(indentFormat + "return sizeHint;");
+		depthDecSpace();
+		System.out.println(indentFormat + "}");
+		System.out.println();
+		System.out.println(indentFormat + "// Setter");
 		System.out.println(indentFormat + "public void set" + primitiveClass + "(int index, " +
 				primitiveClass + " " + variableName + ") {");
 		System.out.println();
-		
 		depthIncSpace();
-		
 		System.out.println(indentFormat + "internalClassRepresentation.add(index, " + variableName + ");");
-		
 		depthDecSpace();
 		System.out.println(indentFormat + "}");
-		
 		System.out.println();
 		System.out.println(indentFormat + "// Getter");
 		System.out.println(indentFormat + "public " + primitiveClass + " get" + primitiveClass + "(int index) {");
@@ -222,6 +234,11 @@ public class LengthlessType1Generator {
 		System.out.println(indentFormat + "int elementSize = " + primitiveClassSize + ";");
 		System.out.println(indentFormat + "byte[] elementBytes = new byte[elementSize];");
 		System.out.println(indentFormat + "int numElements = buffer.getWrittenBytes().length / elementSize;");
+		System.out.println();
+		System.out.println(indentFormat + "if (numElements == 0)");
+		depthIncSpace();
+		System.out.println(indentFormat + "numElements = sizeHint;");
+		depthDecSpace();
 		System.out.println();
 		System.out.println(indentFormat + "internalClassRepresentation.clear();");
 		System.out.println();

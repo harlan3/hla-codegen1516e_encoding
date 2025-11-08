@@ -112,12 +112,10 @@ public class LengthlessType2Generator {
 		
 		System.out.println("import java.util.ArrayList;");
 		System.out.println();
-		
 		System.out.println("@SuppressWarnings(\"unused\")");
 		System.out.println("public class " + ledgerEntry.entryType + "_Encode {");
-		
 		depthIncSpace();
-		
+		System.out.println(indentFormat + "private int sizeHint = 0;");
 		System.out.println();
 		System.out.println(indentFormat + "// Constructor");
 		System.out.println(indentFormat + "public " + ledgerEntry.entryType + "_Encode()" + " {");
@@ -143,6 +141,22 @@ public class LengthlessType2Generator {
 		System.out.println();
 		depthIncSpace();
 		System.out.println(indentFormat + "return internalClassRepresentation.size();");
+		depthDecSpace();
+		System.out.println(indentFormat + "}");
+		System.out.println();
+		System.out.println(indentFormat + "// Setter");
+		System.out.println(indentFormat + "public void setSizeHint(int sizeHint) {");
+		System.out.println();
+		depthIncSpace();
+		System.out.println(indentFormat + "this.sizeHint = sizeHint;");
+		depthDecSpace();
+		System.out.println(indentFormat + "}");
+		System.out.println();
+		System.out.println(indentFormat + "// Getter");
+		System.out.println(indentFormat + "public int getSizeHint() {");
+		System.out.println();
+		depthIncSpace();
+		System.out.println(indentFormat + "return sizeHint;");
 		depthDecSpace();
 		System.out.println(indentFormat + "}");
 		System.out.println();
@@ -230,6 +244,11 @@ public class LengthlessType2Generator {
 		System.out.println(indentFormat + "DynamicBuffer tmpBuffer = new DynamicBuffer();");
 		System.out.println(indentFormat + "byte[] elementBytes = new byte[elementSize];");
 		System.out.println(indentFormat + "int numElements = buffer.getWrittenBytes().length / elementSize;");
+		System.out.println();
+		System.out.println(indentFormat + "if (numElements == 0)");
+		depthIncSpace();
+		System.out.println(indentFormat + "numElements = sizeHint;");
+		depthDecSpace();
 		System.out.println();
 		System.out.println(indentFormat + "internalClassRepresentation.clear();");
 		System.out.println();
