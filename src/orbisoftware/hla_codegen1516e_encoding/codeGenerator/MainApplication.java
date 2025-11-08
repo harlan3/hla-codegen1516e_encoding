@@ -45,7 +45,7 @@ public class MainApplication {
 		System.out.println();
 		System.out.println("   -f, --fom          FOM file used by HLA federation");
 		System.out.println("   -e, --element      Element model file which controls which of the FOM models are generated");
-		System.out.println("   -l, --language     Language used for encoders. Either \"java\" or \"c++\" is valid.");
+		System.out.println("   -l, --lines        FOM contains line numbers to support FOM linkage with mindmap");
 		System.out.println("   -h, --help         Show this help message");
 
 	}
@@ -59,7 +59,7 @@ public class MainApplication {
 
 		CmdLineParser.Option fomOption = parser.addStringOption('f', "fom");
 		CmdLineParser.Option elementOption = parser.addStringOption('e', "element");
-		CmdLineParser.Option languageOption = parser.addStringOption('l', "language");
+		CmdLineParser.Option linesOption = parser.addBooleanOption('l', "lines");
 		CmdLineParser.Option helpOption = parser.addBooleanOption('h', "help");
 
 		try {
@@ -72,30 +72,28 @@ public class MainApplication {
 
 		String fomValue = (String) parser.getOptionValue(fomOption);
 		String elementValue = (String) parser.getOptionValue(elementOption);
-		String languageValue = (String) parser.getOptionValue(languageOption);
+		Boolean linesValue = (Boolean) parser.getOptionValue(linesOption);
 		Boolean helpValue = (Boolean) parser.getOptionValue(helpOption);
 
-		if ((helpValue != null) || (fomValue == null || elementValue == null || languageValue == null)) {
+		boolean linesValueBool = false;
+		
+		if ((helpValue != null) || (fomValue == null || elementValue == null)) {
 			printUsage();
 			System.exit(0);
-		} else if (!languageValue.equals("java") && !languageValue.equals("c++")) {
-			
-			if ((helpValue != null) || (fomValue == null || elementValue == null)) {
-				printUsage();
-				System.exit(0);
-			}
 		}
 
+		if (linesValue != null)
+			linesValueBool = true;
+		
 		fomFilename = fomValue;
 		elementModel = elementValue;
-		encoderLanguage = languageValue;
 		
 		codeGeneratorJava.createRootDirectories();
 		
 		codeGeneratorJava.generateEnumPlaceHolderFile();
 		codeGeneratorJava.generateMiscPlaceHolderFile();
 		
-		hlaPathBuilder.generateDatabase(fomFilename, elementModel, "Encode", true);
+		hlaPathBuilder.generateDatabase(fomFilename, elementModel, "Encode", linesValueBool, true);
 		
 		codeGeneratorJava.generateCode();
 		
