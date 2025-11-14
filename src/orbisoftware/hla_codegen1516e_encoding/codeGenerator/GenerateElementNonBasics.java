@@ -163,8 +163,12 @@ public class GenerateElementNonBasics {
 
 			fixedRecordGenerator.setDefaults();
 			FixedRecordGenerator.indentSpace = 3;
-			fixedRecordGenerator.generateEncode(foundNode, 0);
+			fixedRecordGenerator.generateEncode(foundNode, 0, FixedRecordGenerator.FieldPos.First);
 
+			System.out.println();
+			System.out.println(indentFormat + "// Insert padding for alignment of the largest structure member");
+			System.out.println(indentFormat + "utilities.insertPadding(buffer, bufferOffset, alignment);");
+			
 			this.depthDecSpace();
 			System.out.println(indentFormat + "}");
 			System.out.println();
@@ -179,8 +183,13 @@ public class GenerateElementNonBasics {
 			System.out.println(indentFormat + "int bufferOffset = buffer.position();");
 			System.out.println(indentFormat + "byte[] bytes;");
 
-			fixedRecordGenerator.generateDecode(foundNode, 0);
+			fixedRecordGenerator.generateDecode(foundNode, 0, FixedRecordGenerator.FieldPos.First);
 
+			System.out.println();
+			System.out.println(indentFormat + "// Advance buffer to alignment of the largest structure member");
+			System.out.println(indentFormat + "bufferOffset = utilities.align(bufferOffset, alignment);");
+			System.out.println(indentFormat + "buffer.position(bufferOffset);");
+			
 			this.depthDecSpace();
 			System.out.println(indentFormat + "}");
 			System.out.println();

@@ -38,6 +38,8 @@ import orbisoftware.hla_shared.Utilities;
 
 public class FixedRecordGenerator {
 
+	public enum FieldPos { First, Middle, Last };
+	
 	public static int indentSpace;
 
 	private Utils utils = new Utils();
@@ -266,12 +268,12 @@ public class FixedRecordGenerator {
 		}
 	}
 	
-	public void generateEncode(Node node, int depth) {
+	public void generateEncode(Node node, int depth, FieldPos position) {
 
 		final int activeDepth = 1; // This is the depth we are working with
-
+		
 		if (depth == activeDepth)
-			processEncodeNode(node, depth);
+			processEncodeNode(node, depth, position);
 
 		NodeList children = node.getChildNodes();
 
@@ -279,12 +281,17 @@ public class FixedRecordGenerator {
 
 			Node childNode = children.item(i);
 
-			generateEncode(childNode, depth + 1);
+			if (i == 1)
+				position = FieldPos.First;
+			else
+				position = FieldPos.Middle;
+			
+			generateEncode(childNode, depth + 1, position);
 
 		}
 	}
 	
-	private void processEncodeNode(Node node, int depth) {
+	private void processEncodeNode(Node node, int depth, FieldPos position) {
 		
 		switch (node.getNodeType()) {
 
@@ -369,10 +376,20 @@ public class FixedRecordGenerator {
 			
 			if (ledgerEntry.entryTID.equals("Basic")) {
 
-				System.out.println(indentFormat + "// Align and write the " + classPrimitive + " field");
-				System.out.println(indentFormat + "utilities.insertPadding(buffer, bufferOffset, alignment);");
-				System.out.println(indentFormat + "buffer.put(utilities.getBytesFrom" + classPrimitive + "(" + ledgerEntry.entryDataField + "));");
-				System.out.println(indentFormat + "bufferOffset = buffer.position();");
+				if (position == FieldPos.Middle) {
+					System.out.println(indentFormat + "// Align and write the " + classPrimitive + " field");
+					System.out.println(indentFormat + "utilities.insertPadding(buffer, bufferOffset, " + classPrimitive + ".BYTES);");
+				} else if (position == FieldPos.First) {
+					System.out.println(indentFormat + "// Write the " + classPrimitive + " field");
+				}
+				
+				if (position != FieldPos.Last) {
+					System.out.println(indentFormat + "buffer.put(utilities.getBytesFrom" + classPrimitive + "(" + ledgerEntry.entryDataField + "));");
+					System.out.println(indentFormat + "bufferOffset = buffer.position();");
+				} else {
+					System.out.println(indentFormat + "// Insert padding for alignment of the largest structure member");
+					System.out.println(indentFormat + "utilities.insertPadding(buffer, bufferOffset, Byte.BYTES);");
+				}
 				
 				int fieldSize = utils.getNumberBytesFromEncodingType(ledgerEntry.entryType);
 				if (fieldSize > largestStructureMember)
@@ -380,7 +397,7 @@ public class FixedRecordGenerator {
 				
 			} else {
 				
-				System.out.println(indentFormat + "// Write the nested structure, aligned with largest field size");
+				System.out.println(indentFormat + "// Write the nested structure");
 				System.out.println(indentFormat + ledgerEntry.entryDataField + ".encode(buffer, alignment);");
 				System.out.println(indentFormat + "bufferOffset = buffer.position();");
 				nonBasicFields.add(ledgerEntry.entryDataField);
@@ -395,12 +412,12 @@ public class FixedRecordGenerator {
 		}
 	}
 	
-	public void generateDecode(Node node, int depth) {
+	public void generateDecode(Node node, int depth, FieldPos position) {
 
 		final int activeDepth = 1; // This is the depth we are working with
 
 		if (depth == activeDepth)
-			processDecodeNode(node, depth);
+			processDecodeNode(node, depth, position);
 
 		NodeList children = node.getChildNodes();
 
@@ -408,12 +425,17 @@ public class FixedRecordGenerator {
 
 			Node childNode = children.item(i);
 
-			generateDecode(childNode, depth + 1);
+			if (i == 1)
+				position = FieldPos.First;
+			else
+				position = FieldPos.Middle;
+
+			generateDecode(childNode, depth + 1, position);
 
 		}
 	}
 	
-	private void processDecodeNode(Node node, int depth) {
+	private void processDecodeNode(Node node, int depth, FieldPos position) {
 		
 		switch (node.getNodeType()) {
 
@@ -496,23 +518,23 @@ public class FixedRecordGenerator {
 			depthIncSpace();
 			
 			if (ledgerEntry.entryTID.equals("Basic")) {
+				
+				if (position == FieldPos.Middle) {
+					System.out.println(indentFormat + "// Align and read the " + classPrimitive + " field");
+					System.out.println(indentFormat + "bufferOffset = utilities.align(bufferOffset, " + classPrimitive + ".BYTES);");
+					System.out.println(indentFormat + "buffer.position(bufferOffset);");
+				} else if (position == FieldPos.First) {
+					System.out.println(indentFormat + "// Read the " + classPrimitive + " field");
+				}
 
-				System.out.println(indentFormat + "// Align and read the " + classPrimitive + " field");
-				System.out.println(indentFormat + "bufferOffset = utilities.align(bufferOffset, alignment);");
-				System.out.println(indentFormat + "buffer.position(bufferOffset);");
-				if (classPrimitive.equals("Boolean"))
-					System.out.println(indentFormat + "bytes = new byte[1];");
-				else
-					System.out.println(indentFormat + "bytes = new byte[" + classPrimitive + ".BYTES];");
+				System.out.println(indentFormat + "bytes = new byte[" + classPrimitive + ".BYTES];");
 				System.out.println(indentFormat + "buffer.get(bytes);");
 				System.out.println(indentFormat + ledgerEntry.entryDataField + " = utilities.get" + classPrimitive + "FromBytes(bytes);");
-				if (classPrimitive.equals("Boolean"))
-					System.out.println(indentFormat + "bufferOffset += 1;");
-				else
-					System.out.println(indentFormat + "bufferOffset += " + classPrimitive + ".BYTES;");
+				System.out.println(indentFormat + "bufferOffset = buffer.position();");
+				
 			} else {
 				
-				System.out.println(indentFormat + "// Write the nested structure, aligned with largest field size");
+				System.out.println(indentFormat + "// Write the nested structure");
 				System.out.println(indentFormat + ledgerEntry.entryDataField + ".decode(buffer, alignment);");
 				System.out.println(indentFormat + "bufferOffset = buffer.position();");
 			}

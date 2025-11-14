@@ -399,8 +399,7 @@ public class VariantRecordGenerator {
 			// This is a possible discriminant field for the variant record
 			if (ledgerEntry.entryTID.equals("Basic") && ledgerEntry.entryIsDiscriminant) {
 
-				System.out.println(indentFormat + "// Align and write the " + ledgerEntry.entryDataField + " field");
-				System.out.println(indentFormat + "utilities.insertPadding(buffer, bufferOffset, alignment);");
+				System.out.println(indentFormat + "// Write the " + ledgerEntry.entryDataField + " field");
 				System.out.println(indentFormat + "buffer.put(utilities.getBytesFrom" + classPrimitive + "(" + ledgerEntry.entryDataField + "));");
 				System.out.println(indentFormat + "bufferOffset = buffer.position();");
 				System.out.println();
@@ -421,8 +420,7 @@ public class VariantRecordGenerator {
 			// This is a possible discriminant field for the variant record
 			} else if (ledgerEntry.entryTID.equals("Enumerated") && ledgerEntry.entryIsDiscriminant) {
 
-				System.out.println(indentFormat + "// Align and write the " + classPrimitive + " field");
-				System.out.println(indentFormat + "utilities.insertPadding(buffer, bufferOffset, alignment);");
+				System.out.println(indentFormat + "// Write the " + ledgerEntry.entryDataField + " field");
 				System.out.println(indentFormat + "buffer.put(utilities.getBytesFrom" + internalValue + "(" + ledgerEntry.entryDataField + ".value));");
 				System.out.println(indentFormat + "bufferOffset = buffer.position();");
 				System.out.println();
@@ -597,19 +595,14 @@ public class VariantRecordGenerator {
 			// This is a possible discriminant field for the variant record
 			if (ledgerEntry.entryTID.equals("Basic") && ledgerEntry.entryIsDiscriminant) {
 
-				System.out.println(indentFormat + "// Align and read the " + classPrimitive + " field");
-				System.out.println(indentFormat + "bufferOffset = utilities.align(bufferOffset, alignment);");
-				System.out.println(indentFormat + "buffer.position(bufferOffset);");
+				System.out.println(indentFormat + "// Read the " + classPrimitive + " field");
 				if (classPrimitive.equals("Boolean"))
 					System.out.println(indentFormat + "bytes = new byte[1];");
 				else
 					System.out.println(indentFormat + "bytes = new byte[" + classPrimitive + ".BYTES];");
 				System.out.println(indentFormat + "buffer.get(bytes);");
 				System.out.println(indentFormat + ledgerEntry.entryDataField + " = utilities.get" + classPrimitive + "FromBytes(bytes);");
-				if (classPrimitive.equals("Boolean"))
-					System.out.println(indentFormat + "bufferOffset += 1;");
-				else
-					System.out.println(indentFormat + "bufferOffset += " + classPrimitive + ".BYTES;");
+				System.out.println(indentFormat + "bufferOffset = buffer.position();");
 				System.out.println();
 				System.out.println(indentFormat + "switch (" + ledgerEntry.entryDataField + ") {");
 				
@@ -624,19 +617,14 @@ public class VariantRecordGenerator {
 			// This is a possible discriminant field for the variant record
 			else if (ledgerEntry.entryTID.equals("Enumerated") && ledgerEntry.entryIsDiscriminant) {
 
-				System.out.println(indentFormat + "// Align and read the " + classPrimitive + " field");
-				System.out.println(indentFormat + "bufferOffset = utilities.align(bufferOffset, alignment);");
-				System.out.println(indentFormat + "buffer.position(bufferOffset);");
+				System.out.println(indentFormat + "// Read the " + classPrimitive + " field");
 				if (internalValue.equals("Boolean"))
 					System.out.println(indentFormat + "bytes = new byte[1];");
 				else
 					System.out.println(indentFormat + "bytes = new byte[" + internalValue + ".BYTES];");
 				System.out.println(indentFormat + "buffer.get(bytes);");
 				System.out.println(indentFormat + ledgerEntry.entryDataField + ".value = utilities.get" + internalValue + "FromBytes(bytes);");
-				if (internalValue.equals("Boolean"))
-					System.out.println(indentFormat + "bufferOffset += 1;");
-				else
-					System.out.println(indentFormat + "bufferOffset += " + internalValue + ".BYTES;");
+				System.out.println(indentFormat + "bufferOffset = buffer.position();");
 				System.out.println();
 				System.out.println(indentFormat + "switch (" + ledgerEntry.entryDataField + ".value) {");
 				
