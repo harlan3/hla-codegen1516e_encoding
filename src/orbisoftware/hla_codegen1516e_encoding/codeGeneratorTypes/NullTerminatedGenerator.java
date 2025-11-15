@@ -206,7 +206,6 @@ public class NullTerminatedGenerator {
 		System.out.println();
 		
 		depthIncSpace();
-		System.out.println(indentFormat + "int bufferOffset = utilities.align(buffer.position(), alignment);");
 		System.out.println(indentFormat + "int newSize = 0;");
 		System.out.println();
 		
@@ -224,7 +223,6 @@ public class NullTerminatedGenerator {
 		System.out.println();
 		
 		System.out.println(indentFormat + "byte[] newByteArray = new byte[(newSize + 1)];");
-		System.out.println(indentFormat + "buffer.position(bufferOffset);");
 		System.out.println();
 		System.out.println(indentFormat + "buffer.get(newByteArray);");
 		System.out.println(indentFormat + "setValue(newByteArray);");

@@ -38,7 +38,7 @@ import orbisoftware.hla_shared.Utilities;
 
 public class FixedRecordGenerator {
 
-	public enum FieldPos { First, Middle, Last };
+	public enum FieldPos { First, Middle };
 	
 	public static int indentSpace;
 
@@ -383,13 +383,8 @@ public class FixedRecordGenerator {
 					System.out.println(indentFormat + "// Write the " + classPrimitive + " field");
 				}
 				
-				if (position != FieldPos.Last) {
-					System.out.println(indentFormat + "buffer.put(utilities.getBytesFrom" + classPrimitive + "(" + ledgerEntry.entryDataField + "));");
-					System.out.println(indentFormat + "bufferOffset = buffer.position();");
-				} else {
-					System.out.println(indentFormat + "// Insert padding for alignment of the largest structure member");
-					System.out.println(indentFormat + "utilities.insertPadding(buffer, bufferOffset, Byte.BYTES);");
-				}
+				System.out.println(indentFormat + "buffer.put(utilities.getBytesFrom" + classPrimitive + "(" + ledgerEntry.entryDataField + "));");
+				System.out.println(indentFormat + "bufferOffset = buffer.position();");
 				
 				int fieldSize = utils.getNumberBytesFromEncodingType(ledgerEntry.entryType);
 				if (fieldSize > largestStructureMember)
@@ -535,7 +530,9 @@ public class FixedRecordGenerator {
 				
 			} else {
 				
-				System.out.println(indentFormat + "// Write the nested structure");
+				System.out.println(indentFormat + "// Align and read the nested structure");
+				System.out.println(indentFormat + "bufferOffset = utilities.align(bufferOffset, " + ledgerEntry.entryDataField + ".getAlignment());");
+				System.out.println(indentFormat + "buffer.position(bufferOffset);");				
 				System.out.println(indentFormat + ledgerEntry.entryDataField + ".decode(buffer, alignment);");
 				System.out.println(indentFormat + "bufferOffset = buffer.position();");
 			}

@@ -263,7 +263,7 @@ public class GenerateElementNonBasics {
 			this.depthIncSpace();
 
 			System.out.println();
-			System.out.println(indentFormat + "int bufferOffset = buffer.position();");
+			System.out.println(indentFormat + "int bufferOffset;");
 
 			variantRecordGenerator.setDefaults();
 			FixedRecordGenerator.indentSpace = 3;
@@ -281,7 +281,7 @@ public class GenerateElementNonBasics {
 			this.depthIncSpace();
 
 			System.out.println();
-			System.out.println(indentFormat + "int bufferOffset = buffer.position();");
+			System.out.println(indentFormat + "int bufferOffset;");
 			System.out.println(indentFormat + "byte[] bytes;");
 
 			variantRecordGenerator.generateDecode(foundNode, 0);
