@@ -397,7 +397,8 @@ public class FixedRecordGenerator {
 				
 			} else {
 				
-				System.out.println(indentFormat + "// Write the nested structure");
+				System.out.println(indentFormat + "// Align and write the nested structure");
+				System.out.println(indentFormat + "utilities.insertPadding(buffer, bufferOffset, " + ledgerEntry.entryDataField + ".getAlignment());");
 				System.out.println(indentFormat + ledgerEntry.entryDataField + ".encode(buffer, alignment);");
 				System.out.println(indentFormat + "bufferOffset = buffer.position();");
 				nonBasicFields.add(ledgerEntry.entryDataField);
