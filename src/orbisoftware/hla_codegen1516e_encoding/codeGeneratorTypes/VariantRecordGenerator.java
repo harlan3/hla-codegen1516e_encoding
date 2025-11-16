@@ -448,8 +448,7 @@ public class VariantRecordGenerator {
 					System.out.println("Exception in variant record Encode, when using variant ordering for class" + variantClassName);
 				}
 				
-				System.out.println(indentFormat + "// Align and write the " + classPrimitive + " field");
-				System.out.println(indentFormat + "utilities.insertPadding(buffer, bufferOffset, alignment);");
+				System.out.println(indentFormat + "// Write the " + classPrimitive + " field");
 				System.out.println(indentFormat + "buffer.put(utilities.getBytesFrom" + classPrimitive + "(" + ledgerEntry.entryDataField + "));");
 				System.out.println(indentFormat + "bufferOffset = buffer.position();");
 				System.out.println(indentFormat + "break;");
@@ -467,7 +466,7 @@ public class VariantRecordGenerator {
 					System.out.println("Exception in variant record Encode, when using variant ordering for class" + variantClassName);
 				}
 				
-				System.out.println(indentFormat + "// Write the nested structure, aligned with largest field size");
+				System.out.println(indentFormat + "// Write the nested structure");
 				System.out.println(indentFormat + ledgerEntry.entryDataField + ".encode(buffer, alignment);");
 				System.out.println(indentFormat + "bufferOffset = buffer.position();");
 				System.out.println(indentFormat + "break;");
@@ -646,9 +645,7 @@ public class VariantRecordGenerator {
 					System.out.println("Exception in variant record Decode, when using variant ordering for class" + variantClassName);
 				}
 				
-				System.out.println(indentFormat + "// Align and read the " + classPrimitive + " field");
-				System.out.println(indentFormat + "bufferOffset = utilities.align(bufferOffset, alignment);");
-				System.out.println(indentFormat + "buffer.position(bufferOffset);");
+				System.out.println(indentFormat + "// Read the " + classPrimitive + " field");
 				if (classPrimitive.equals("Boolean"))
 					System.out.println(indentFormat + "bytes = new byte[1];");
 				else
@@ -674,7 +671,7 @@ public class VariantRecordGenerator {
 					System.out.println("Exception in variant record Decode, when using variant ordering for class" + variantClassName);
 				}
 				
-				System.out.println(indentFormat + "// Write the nested structure, aligned with largest field size");
+				System.out.println(indentFormat + "// Write the nested structure");
 				System.out.println(indentFormat + ledgerEntry.entryDataField + ".decode(buffer, alignment);");
 				System.out.println(indentFormat + "bufferOffset = buffer.position();");
 				System.out.println(indentFormat + "break;");
