@@ -1,2 +1,4 @@
+# Mapping of variant record discriminant to the variant record case statement
 # Variant | Discriminant | Ordering
 SpreadSpectrumVariantStruct | SpreadSpectrumType | 6, 2, 3, 1
+SpatialVariantStruct | DeadReckoningAlgorithm | 8, 1, 5, 7, 3, 0, 4, 6, 2
