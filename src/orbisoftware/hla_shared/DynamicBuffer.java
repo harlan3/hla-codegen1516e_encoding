@@ -1,22 +1,9 @@
-/*
- *  HLA Codegen 1516E Encoding
- *
- *  Copyright (C) 2024 Harlan Murphy
- *  Orbis Software - orbisoftware@gmail.com
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
+/**
+ * Copyright (C) 2025, Harlan Murphy
+ * Use of this source code is governed by a BSD Zero Clause License
+ * 
+ * See project license.txt for details
+*/
 
 package orbisoftware.hla_shared;
 
@@ -25,11 +12,14 @@ import java.nio.ByteBuffer;
 public class DynamicBuffer {
 	
     private ByteBuffer buffer;
-    private int DEFAULT_CAPACITY = 1024;
+    private int currentCapacity = 0;
+    private final int DEFAULT_CAPACITY = 1024;
 
     // Constructor to initialize with an initial capacity
     public DynamicBuffer() {
         buffer = ByteBuffer.allocate(DEFAULT_CAPACITY);
+        buffer.limit(DEFAULT_CAPACITY);
+        currentCapacity = DEFAULT_CAPACITY;
     }
 
     // Ensures the buffer has enough capacity to accommodate new data
@@ -41,9 +31,11 @@ public class DynamicBuffer {
 
             // Create a new buffer with the new capacity and copy existing data
             ByteBuffer newBuffer = ByteBuffer.allocate(newCapacity);
+            newBuffer.limit(newCapacity);
+            currentCapacity = newCapacity;
             buffer.flip(); // Switch from writing mode to reading mode
             newBuffer.put(buffer); // Copy old data into the new buffer
-
+            
             // Assign new buffer
             buffer = newBuffer;
         }
@@ -111,6 +103,7 @@ public class DynamicBuffer {
     // Flip the buffer from writing mode to reading mode
     public void flip() {
         buffer.flip();
+        buffer.limit(currentCapacity);
     }
 
     // Clear the buffer for new writing
