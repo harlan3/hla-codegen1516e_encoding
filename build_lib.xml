@@ -6,29 +6,18 @@
     <property name="dist.dir" value="dist"/>
     <property name="jar.name" value="encoding_classes.jar"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="utilssrc.dir" location="src\orbisoftware\hla_shared"/>
-    <property name="utilsdest.dir" location="codegen_java\orbisoftware\hla_shared"/>
 
     <!-- Clean task -->
     <target name="clean">
         <delete dir="${classes.dir}"/>
     </target>
-
-    <!-- Copy files from utils source to destination -->
-    <target name="copy-files">
-        <!-- Copy all files from src to dest directory -->
-        <copy todir="${utilsdest.dir}">
-            <fileset dir="${utilssrc.dir}">
-                <include name="**/*.java"/>
-            </fileset>
-        </copy>
-    </target>
     
     <!-- Compile task -->
-    <target name="compile" depends="clean, copy-files">
+    <target name="compile" depends="clean">
         <mkdir dir="${classes.dir}"/>
         <javac srcdir="${src.dir}" destdir="${classes.dir}" source="17" target="17" debuglevel="${debuglevel}" includeantruntime="false">
             <classpath>
+            	<pathelement path="${lib.dir}/hla-shared-lib.jar"/>
                 <pathelement path="${dist.dir}/hla_1516e_encoding.jar"/>
                 <pathelement path="C:\rtis_D39\lib\win64_vc++-14.0\rtis1516e.jar"/>
             </classpath>

@@ -36,7 +36,7 @@ import org.w3c.dom.NodeList;
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.SharedResources.ElementType;
 import orbisoftware.hla_pathbuilder.MMNodeTreeRepository;
 import orbisoftware.hla_pathbuilder.NodeTree;
-import orbisoftware.hla_pathbuilder.Utils;
+import orbisoftware.hla_pathbuilder.PathBuilderUtilities;
 import orbisoftware.hla_shared.Utilities;
 
 public class CodeGeneratorJava {
@@ -88,13 +88,13 @@ public class CodeGeneratorJava {
 			File codegenDir = new File(System.getProperty("user.dir") + File.separator + code_gen_dir);
 			File codeGenObjDir = new File(
 					System.getProperty("user.dir") + File.separator + code_gen_dir + File.separator +
-					Utilities.packageRootDir + File.separator + "Objects");
+					Utilities.encodingPackageRootDir + File.separator + "Objects");
 			File codeGenIntDir = new File(
 					System.getProperty("user.dir") + File.separator + code_gen_dir + File.separator + 
-					Utilities.packageRootDir + File.separator + "Interactions");
+					Utilities.encodingPackageRootDir + File.separator + "Interactions");
 			File commonDir = new File(
 					System.getProperty("user.dir") + File.separator + code_gen_dir + File.separator + 
-					Utilities.packageRootDir + File.separator + "Common");
+					Utilities.encodingPackageRootDir + File.separator + "Common");
 			
 			if (Files.exists(codegenDir.toPath()))
 				FileUtils.forceDelete(codegenDir);
@@ -104,7 +104,7 @@ public class CodeGeneratorJava {
 			FileUtils.forceMkdir(codeGenIntDir);
 			FileUtils.forceMkdir(commonDir);
 			
-			final String enumsString = code_gen_dir + File.separator + Utilities.packageRootDir + 
+			final String enumsString = code_gen_dir + File.separator + Utilities.encodingPackageRootDir + 
 					File.separator + "Common" + File.separator + "Enums";
 			File enumsDir = new File(System.getProperty("user.dir") + File.separator + enumsString);
 
@@ -113,7 +113,7 @@ public class CodeGeneratorJava {
 
 			FileUtils.forceMkdir(enumsDir);
 
-			final String miscString = code_gen_dir + File.separator + Utilities.packageRootDir +
+			final String miscString = code_gen_dir + File.separator + Utilities.encodingPackageRootDir +
 					File.separator  + "Common" + File.separator + "Misc";
 			File miscDir = new File(System.getProperty("user.dir") + File.separator + miscString);
 
@@ -131,10 +131,10 @@ public class CodeGeneratorJava {
 		String elementReference = "";
 		
 		if (elementType == ElementType.Object) {
-			System.out.println("package " + Utilities.packageRoot + "Objects." + elementName + ";");
+			System.out.println("package " + Utilities.encodingPackageRoot + "Objects." + elementName + ";");
 			elementReference = "Objects";
 		} else if (elementType == ElementType.Interaction) {
-			System.out.println("package " + Utilities.packageRoot + "Interactions." + elementName + ";");
+			System.out.println("package " + Utilities.encodingPackageRoot + "Interactions." + elementName + ";");
 			elementReference = "Interactions";
 		}
 
@@ -153,15 +153,15 @@ public class CodeGeneratorJava {
 		System.out.println("import orbisoftware.hla_shared.*;");
 		System.out.println("");
 		
-		System.out.println("import " + Utilities.packageRoot + "Common.Enums.*;");
-		System.out.println("import " + Utilities.packageRoot + "Common.FixedArrays.*;");
-		System.out.println("import " + Utilities.packageRoot + "Common.FixedRecords.*;");
-		System.out.println("import " + Utilities.packageRoot + "Common.LengthlessArrays.*;");
-		System.out.println("import " + Utilities.packageRoot + "Common.NullTerminatedArrays.*;");
-		System.out.println("import " + Utilities.packageRoot + "Common.PrefixedStringLength.*;");
-		System.out.println("import " + Utilities.packageRoot + "Common.VariableArrays.*;");
-		System.out.println("import " + Utilities.packageRoot + "Common.VariantRecords.*;");
-		System.out.println("import " + Utilities.packageRoot + "Common.Misc.*;");
+		System.out.println("import " + Utilities.encodingPackageRoot + "Common.Enums.*;");
+		System.out.println("import " + Utilities.encodingPackageRoot + "Common.FixedArrays.*;");
+		System.out.println("import " + Utilities.encodingPackageRoot + "Common.FixedRecords.*;");
+		System.out.println("import " + Utilities.encodingPackageRoot + "Common.LengthlessArrays.*;");
+		System.out.println("import " + Utilities.encodingPackageRoot + "Common.NullTerminatedArrays.*;");
+		System.out.println("import " + Utilities.encodingPackageRoot + "Common.PrefixedStringLength.*;");
+		System.out.println("import " + Utilities.encodingPackageRoot + "Common.VariableArrays.*;");
+		System.out.println("import " + Utilities.encodingPackageRoot + "Common.VariantRecords.*;");
+		System.out.println("import " + Utilities.encodingPackageRoot + "Common.Misc.*;");
 		
 		System.out.println();
 	}
@@ -231,14 +231,14 @@ public class CodeGeneratorJava {
 			
 			NamedNodeMap attributes = node.getAttributes();
 			String nodeText = attributes.getNamedItem("TEXT").toString().replaceAll("TEXT=\"", "").replaceAll("\"", "");
-			Utils utils = new Utils();
+			PathBuilderUtilities pathBuilderUtilities = new PathBuilderUtilities();
 			String nodeSplit[] = nodeText.split(" ");
 			String dataFieldName = "";
 			if (nodeSplit.length > 1) {
 				dataFieldName = nodeSplit[1];
-				dataFieldName = utils.lowercaseFirstLetter(dataFieldName);
+				dataFieldName = pathBuilderUtilities.lowercaseFirstLetter(dataFieldName);
 			}
-			String primitiveType = utils.getPrimitiveFromEncodingType(nodeSplit[0]);
+			String primitiveType = pathBuilderUtilities.getPrimitiveFromEncodingType(nodeSplit[0]);
 			
 			// This is a non primitive type that needs to be added to the ledger
 			if (primitiveType.equals("Unknown")) {
@@ -286,17 +286,17 @@ public class CodeGeneratorJava {
 			NamedNodeMap attributes = node.getAttributes();
 			String nodeText = 
 					attributes.getNamedItem("TEXT").toString().replaceAll("TEXT=\"", "").replaceAll("\"", "");
-			Utils utils = new Utils();
+			PathBuilderUtilities pathBuilderUtilities = new PathBuilderUtilities();
 			String nodeSplit[] = nodeText.split(" ");
 			String dataFieldName = "";
 			if (nodeSplit.length > 1) {
-				dataFieldName = utils.convertToCamelCase(nodeSplit[1]);
+				dataFieldName = pathBuilderUtilities.convertToCamelCase(nodeSplit[1]);
 			} else {
 				int x=0;
 				x++;
 			}
 				
-			String primitiveType = utils.getPrimitiveFromEncodingType(nodeSplit[0]);
+			String primitiveType = pathBuilderUtilities.getPrimitiveFromEncodingType(nodeSplit[0]);
 			
 			depthCurSpace();
 			
@@ -383,14 +383,14 @@ public class CodeGeneratorJava {
 					attributes.getNamedItem("ID").toString().replaceAll("ID=\"", "").replaceAll("\"", "");
 			String nodeTableID = 
 					attributes.getNamedItem("TID").toString().replaceAll("TID=\"", "").replaceAll("\"", "");
-			Utils utils = new Utils();
+			PathBuilderUtilities pathBuilderUtilities = new PathBuilderUtilities();
 			String nodeSplit[] = nodeText.split(" ");
 			String dataFieldName = "";
 			if (nodeSplit.length > 1)
-				dataFieldName = utils.convertToCamelCase(nodeSplit[1]);
+				dataFieldName = pathBuilderUtilities.convertToCamelCase(nodeSplit[1]);
 			
-			String primitiveType = utils.getPrimitiveFromEncodingType(nodeSplit[0]);
-			String classType = utils.getClassFromEncodingType(nodeSplit[0]);
+			String primitiveType = pathBuilderUtilities.getPrimitiveFromEncodingType(nodeSplit[0]);
+			String classType = pathBuilderUtilities.getClassFromEncodingType(nodeSplit[0]);
 			
 			depthIncSpace();
 
@@ -463,14 +463,14 @@ public class CodeGeneratorJava {
 					attributes.getNamedItem("ID").toString().replaceAll("ID=\"", "").replaceAll("\"", "");
 			String nodeTableID = 
 					attributes.getNamedItem("TID").toString().replaceAll("TID=\"", "").replaceAll("\"", "");
-			Utils utils = new Utils();
+			PathBuilderUtilities pathBuilderUtilities = new PathBuilderUtilities();
 			String nodeSplit[] = nodeText.split(" ");
 			String dataFieldName = "";
 			if (nodeSplit.length > 1)
-				dataFieldName = utils.convertToCamelCase(nodeSplit[1]);
+				dataFieldName = pathBuilderUtilities.convertToCamelCase(nodeSplit[1]);
 			
-			String primitiveType = utils.getPrimitiveFromEncodingType(nodeSplit[0]);
-			String classType = utils.getClassFromEncodingType(nodeSplit[0]);
+			String primitiveType = pathBuilderUtilities.getPrimitiveFromEncodingType(nodeSplit[0]);
+			String classType = pathBuilderUtilities.getClassFromEncodingType(nodeSplit[0]);
 			String attribParamTypeString = "";
 			
 			if (elementType == ElementType.Object)
@@ -613,7 +613,7 @@ public class CodeGeneratorJava {
 	public void generateEnumPlaceHolderFile() {
 
 		try {
-			final String generatedTypeString = "codegen_java" + File.separator + Utilities.packageRootDir + File.separator + "Common" + File.separator + "Enums";
+			final String generatedTypeString = "codegen_java" + File.separator + Utilities.encodingPackageRootDir + File.separator + "Common" + File.separator + "Enums";
 			File generatedTypeDir = new File(System.getProperty("user.dir") + File.separator + generatedTypeString);
 
 			PrintStream outputStream = new PrintStream(
@@ -621,7 +621,7 @@ public class CodeGeneratorJava {
 			PrintStream console = System.out;
 			System.setOut(outputStream);
 			
-			System.out.println("package " + Utilities.packageRoot + "Common.Enums;");
+			System.out.println("package " + Utilities.encodingPackageRoot + "Common.Enums;");
 			System.out.println();
 			System.out.println("public class PlaceHolderEnums {");
 			System.out.println();
@@ -639,7 +639,7 @@ public class CodeGeneratorJava {
 	public void generateMiscPlaceHolderFile() {
 
 		try {
-			final String generatedTypeString = "codegen_java" + File.separator + Utilities.packageRootDir + File.separator + "Common" + File.separator + "Misc";
+			final String generatedTypeString = "codegen_java" + File.separator + Utilities.encodingPackageRootDir + File.separator + "Common" + File.separator + "Misc";
 			File generatedTypeDir = new File(System.getProperty("user.dir") + File.separator + generatedTypeString);
 
 			PrintStream outputStream = new PrintStream(
@@ -647,7 +647,7 @@ public class CodeGeneratorJava {
 			PrintStream console = System.out;
 			System.setOut(outputStream);
 			
-			System.out.println("package " + Utilities.packageRoot + "Common.Misc;");
+			System.out.println("package " + Utilities.encodingPackageRoot + "Common.Misc;");
 			System.out.println();
 			System.out.println("public class PlaceHolderMisc {");
 			System.out.println();
@@ -666,7 +666,7 @@ public class CodeGeneratorJava {
 
 		try {
 			// Fixed Record
-			final String generatedTypeString = "codegen_java" + File.separator + Utilities.packageRootDir + File.separator +
+			final String generatedTypeString = "codegen_java" + File.separator + Utilities.encodingPackageRootDir + File.separator +
 					"Common" + File.separator + generatedType;
 			File generatedTypeDir = new File(System.getProperty("user.dir") + File.separator + generatedTypeString);
 
@@ -675,7 +675,7 @@ public class CodeGeneratorJava {
 			PrintStream console = System.out;
 			System.setOut(outputStream);
 			
-			System.out.println("package " + Utilities.packageRoot + "Common." + generatedType + ";");
+			System.out.println("package " + Utilities.encodingPackageRoot + "Common." + generatedType + ";");
 			System.out.println();
 			System.out.println("public class PlaceHolder" + generatedType + " {");
 			System.out.println();
@@ -703,11 +703,11 @@ public class CodeGeneratorJava {
 			
 			File codegenDir = new File(System.getProperty("user.dir") + File.separator + code_gen_dir);
 			File codeGenObjDir = new File(
-					System.getProperty("user.dir") + File.separator + code_gen_dir + File.separator + Utilities.packageRootDir + File.separator + "Objects");
+					System.getProperty("user.dir") + File.separator + code_gen_dir + File.separator + Utilities.encodingPackageRootDir + File.separator + "Objects");
 			File codeGenIntDir = new File(
-					System.getProperty("user.dir") + File.separator + code_gen_dir + File.separator + Utilities.packageRootDir + File.separator + "Interactions");
+					System.getProperty("user.dir") + File.separator + code_gen_dir + File.separator + Utilities.encodingPackageRootDir + File.separator + "Interactions");
 			File commonDir = new File(
-					System.getProperty("user.dir") + File.separator + code_gen_dir + File.separator + Utilities.packageRootDir + File.separator + "Common");
+					System.getProperty("user.dir") + File.separator + code_gen_dir + File.separator + Utilities.encodingPackageRootDir + File.separator + "Common");
 			
 			File codegenFixedArraysDir = new File(commonDir + File.separator + "FixedArrays");
 			File codegenFixedRecordsDir = new File(commonDir + File.separator + "FixedRecords");
@@ -736,7 +736,7 @@ public class CodeGeneratorJava {
 			
 			for (int i = 0; i < objectArraySize; i++) {
 
-				Utils utils = new Utils();
+				PathBuilderUtilities pathBuilderUtilities = new PathBuilderUtilities();
 				setDefaults();
 				
 				File targetObjectDir = new File(codeGenObjDir + File.separator + mmNodeTreeRepository.getObjectName(i));
@@ -801,7 +801,7 @@ public class CodeGeneratorJava {
 				System.out.println();
 
 				for (String attribute : attributesList) {
-					String attributeFormatted = utils.convertToCamelCase(attribute) + "AttributeHandle";
+					String attributeFormatted = pathBuilderUtilities.convertToCamelCase(attribute) + "AttributeHandle";
 					System.out.println("   private AttributeHandle " + attributeFormatted + ";");
 				}
 				
@@ -833,7 +833,7 @@ public class CodeGeneratorJava {
 				
 				for (String attribute : attributesList) {
 					
-					String attributeFormatted = utils.convertToCamelCase(attribute) + "AttributeHandle";
+					String attributeFormatted = pathBuilderUtilities.convertToCamelCase(attribute) + "AttributeHandle";
 					System.out.println("         " + attributeFormatted + " = " + "rtiAmb.getAttributeHandle(objectHandle, " +
 							"\"" + attribute + "\");");
 					System.out.println("         " + "setupAttributeMappingRun(" + attributeFormatted + ");");
@@ -841,7 +841,7 @@ public class CodeGeneratorJava {
 				}
 				
 				for (String attribute : attributesList) {
-					String attributeFormatted = utils.convertToCamelCase(attribute) + "AttributeHandle";
+					String attributeFormatted = pathBuilderUtilities.convertToCamelCase(attribute) + "AttributeHandle";
 					System.out.println("         " + "attribHandles.add(" + attributeFormatted + ");");
 				}
 				System.out.println();
@@ -860,7 +860,7 @@ public class CodeGeneratorJava {
 				System.out.println();
 				
 				for (String attribute : attributesList) {
-					String attributeDecode = utils.convertToCamelCase(attribute) + "Decode";
+					String attributeDecode = pathBuilderUtilities.convertToCamelCase(attribute) + "Decode";
 					System.out.println("         if (attributeHandle.equals(rtiAmb.getAttributeHandle(objectHandle, \"" + attribute + "\")))");
 					System.out.println("            decodeActions.put(attributeHandle.hashCode(),() -> " + attributeDecode + "());");
 					System.out.println();
@@ -932,7 +932,7 @@ public class CodeGeneratorJava {
 
 			for (int i = 0; i < interactionArraySize; i++) {
 
-				Utils utils = new Utils();
+				PathBuilderUtilities pathBuilderUtilities = new PathBuilderUtilities();
 				setDefaults();
 				
 				File targetInteractionDir = 
@@ -985,7 +985,7 @@ public class CodeGeneratorJava {
 				System.out.println();
 
 				for (String parameter : parametersList) {
-					String parameterFormatted = utils.convertToCamelCase(parameter) + "ParameterHandle";
+					String parameterFormatted = pathBuilderUtilities.convertToCamelCase(parameter) + "ParameterHandle";
 					System.out.println("   private ParameterHandle " + parameterFormatted + ";");
 				}
 				System.out.println();
@@ -1016,7 +1016,7 @@ public class CodeGeneratorJava {
 				System.out.println();
 				
 				for (String parameter : parametersList) {
-					String parameterFormatted = utils.convertToCamelCase(parameter) + "ParameterHandle";
+					String parameterFormatted = pathBuilderUtilities.convertToCamelCase(parameter) + "ParameterHandle";
 					System.out.println("         " + parameterFormatted + " = " + "rtiAmb.getParameterHandle(interactionHandle, " +
 							"\"" + parameter + "\");");
 					System.out.println("         " + "setupParameterMappingRun(" + parameterFormatted + ");");
@@ -1037,7 +1037,7 @@ public class CodeGeneratorJava {
 				System.out.println();
 				
 				for (String parameter : parametersList) {
-					String parameterDecode = utils.convertToCamelCase(parameter) + "Decode";
+					String parameterDecode = pathBuilderUtilities.convertToCamelCase(parameter) + "Decode";
 					System.out.println("         if (parameterHandle.equals(rtiAmb.getParameterHandle(interactionHandle, \"" + parameter + "\")))");
 					System.out.println("            decodeActions.put(parameterHandle.hashCode(),() -> " + parameterDecode + "());");
 					System.out.println();

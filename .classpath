@@ -13,6 +13,6 @@
 	<classpathentry kind="lib" path="lib/derbyclient.jar"/>
 	<classpathentry kind="lib" path="lib/derbyshared.jar"/>
 	<classpathentry kind="lib" path="lib/hla_path_builder.jar"/>
-        <!-- Put classpathentry here for your RTI 1516E jar file -->
+	<classpathentry kind="lib" path="lib/hla-shared-lib.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

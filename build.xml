@@ -39,6 +39,7 @@
             <pathelement path="${lib.dir}/derbyclient.jar"/>
             <pathelement path="${lib.dir}/derbyshared.jar"/>
             <pathelement path="${lib.dir}/hla_path_builder.jar"/>
+            <pathelement path="${lib.dir}/hla-shared-lib.jar"/>
          </classpath>
       </javac>
    </target>

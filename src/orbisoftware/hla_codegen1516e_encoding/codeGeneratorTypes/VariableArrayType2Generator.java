@@ -27,7 +27,7 @@ import org.w3c.dom.NodeList;
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.CodeGeneratorJava;
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.LedgerEntry;
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.SharedResources.ElementType;
-import orbisoftware.hla_pathbuilder.Utils;
+import orbisoftware.hla_pathbuilder.PathBuilderUtilities;
 import orbisoftware.hla_shared.Utilities;
 
 // This array is of non primitive type
@@ -35,7 +35,7 @@ public class VariableArrayType2Generator {
 
 	public static int indentSpace;
 
-	private Utils utils = new Utils();
+	private PathBuilderUtilities pathBuilderUtilities = new PathBuilderUtilities();
 
 	private LedgerEntry ledgerEntry;
 
@@ -104,7 +104,7 @@ public class VariableArrayType2Generator {
 
 	public void printHeader(String elementClassname, ElementType elementType, LedgerEntry value) {
 		
-		System.out.println("package " + Utilities.packageRoot + "Common.VariableArrays;");
+		System.out.println("package " + Utilities.encodingPackageRoot + "Common.VariableArrays;");
 
 		System.out.println();
 
@@ -134,7 +134,7 @@ public class VariableArrayType2Generator {
 		Utilities utilities = new Utilities();
 		String nativeClass = ledgerEntry.entryClassType;
 		nativeClass = utilities.substituteImplementations(nativeClass);
-		String variableName = utils.convertToCamelCase(nativeClass);
+		String variableName = pathBuilderUtilities.convertToCamelCase(nativeClass);
 		
 		depthCurSpace();
 		

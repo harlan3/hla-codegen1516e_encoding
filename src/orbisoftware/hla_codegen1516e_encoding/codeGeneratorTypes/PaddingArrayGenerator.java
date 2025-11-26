@@ -26,7 +26,7 @@ import org.w3c.dom.NodeList;
 
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.LedgerEntry;
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.SharedResources.ElementType;
-import orbisoftware.hla_pathbuilder.Utils;
+import orbisoftware.hla_pathbuilder.PathBuilderUtilities;
 import orbisoftware.hla_shared.Utilities;
 
 // This array is of primitive type
@@ -34,7 +34,7 @@ public class PaddingArrayGenerator {
 
 	public static int indentSpace;
 
-	private Utils utils = new Utils();
+	private PathBuilderUtilities pathBuilderUtilities = new PathBuilderUtilities();
 
 	private LedgerEntry ledgerEntry;
 
@@ -103,7 +103,7 @@ public class PaddingArrayGenerator {
 
 	public void printHeader(String elementClassname, ElementType elementType, LedgerEntry value) {
 		
-		System.out.println("package " + Utilities.packageRoot + "Common.Misc;");
+		System.out.println("package " + Utilities.encodingPackageRoot + "Common.Misc;");
 		
 		System.out.println();
 
@@ -111,7 +111,7 @@ public class PaddingArrayGenerator {
 		System.out.println("import hla.rti1516e.encoding.*;");
 		System.out.println("");
 
-		System.out.println("import " + Utilities.sharedRoot);
+		System.out.println("import " + Utilities.sharedPackageRoot);
 		System.out.println("");
 		
 		System.out.println("import java.util.ArrayList;");
@@ -139,12 +139,12 @@ public class PaddingArrayGenerator {
 		
 		System.out.println();
 		
-		if (utils.isPrimitiveClass(ledgerEntry.entryClassType))
+		if (pathBuilderUtilities.isPrimitiveClass(ledgerEntry.entryClassType))
 			primitiveClass = ledgerEntry.entryClassType;
 		else
-			primitiveClass = utils.getClassFromEncodingType(utils.getEncodingType(ledgerEntry.entryClassType));
+			primitiveClass = pathBuilderUtilities.getClassFromEncodingType(pathBuilderUtilities.getEncodingType(ledgerEntry.entryClassType));
 		
-		String variableName = utils.getDataValueFromPrimitiveClass(ledgerEntry.entryClassType);
+		String variableName = pathBuilderUtilities.getDataValueFromPrimitiveClass(ledgerEntry.entryClassType);
 		
 		System.out.println(indentFormat + "// Class " + primitiveClass);
 		System.out.println(indentFormat + "private ArrayList<" + primitiveClass +
@@ -184,10 +184,10 @@ public class PaddingArrayGenerator {
 		
 		String primitiveClass;
 		
-		if (utils.isPrimitiveClass(ledgerEntry.entryClassType))
+		if (pathBuilderUtilities.isPrimitiveClass(ledgerEntry.entryClassType))
 			primitiveClass = ledgerEntry.entryClassType;
 		else
-			primitiveClass = utils.getClassFromEncodingType(utils.getEncodingType(ledgerEntry.entryClassType));
+			primitiveClass = pathBuilderUtilities.getClassFromEncodingType(pathBuilderUtilities.getEncodingType(ledgerEntry.entryClassType));
 		
 		depthCurSpace();
 		System.out.println(indentFormat + "// Encode outgoing data obtained from internal class representation into DynamicBuffer");
@@ -210,12 +210,12 @@ public class PaddingArrayGenerator {
 		
 		String primitiveClass;
 		
-		if (utils.isPrimitiveClass(ledgerEntry.entryClassType))
+		if (pathBuilderUtilities.isPrimitiveClass(ledgerEntry.entryClassType))
 			primitiveClass = ledgerEntry.entryClassType;
 		else
-			primitiveClass = utils.getClassFromEncodingType(utils.getEncodingType(ledgerEntry.entryClassType));
+			primitiveClass = pathBuilderUtilities.getClassFromEncodingType(pathBuilderUtilities.getEncodingType(ledgerEntry.entryClassType));
 		
-		int primitiveClassSize = utils.getNumberBytesFromPrimitiveType(utils.convertToCamelCase(primitiveClass));
+		int primitiveClassSize = pathBuilderUtilities.getNumberBytesFromPrimitiveType(pathBuilderUtilities.convertToCamelCase(primitiveClass));
 				
 		depthCurSpace();
 		System.out.println(indentFormat + "// Decode incoming data obtained from DynamicBuffer into internal class representation");

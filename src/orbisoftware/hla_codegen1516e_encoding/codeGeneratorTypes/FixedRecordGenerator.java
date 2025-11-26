@@ -32,7 +32,7 @@ import orbisoftware.hla_codegen1516e_encoding.codeGenerator.LedgerEntry;
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.NonBasicTypeLedger;
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.SharedResources.ElementType;
 import orbisoftware.hla_pathbuilder.DatabaseAPI;
-import orbisoftware.hla_pathbuilder.Utils;
+import orbisoftware.hla_pathbuilder.PathBuilderUtilities;
 import orbisoftware.hla_pathbuilder.db_classes.DbEnumeratedDatatype;
 import orbisoftware.hla_shared.Utilities;
 
@@ -42,7 +42,7 @@ public class FixedRecordGenerator {
 	
 	public static int indentSpace;
 
-	private Utils utils = new Utils();
+	private PathBuilderUtilities pathBuilderUtilities = new PathBuilderUtilities();
 
 	private LedgerEntry ledgerEntry;
 
@@ -118,7 +118,7 @@ public class FixedRecordGenerator {
 	public void printHeader(String elementClassName, ElementType elementType) {
 
 
-		System.out.println("package " + Utilities.packageRoot + "Common.FixedRecords;");
+		System.out.println("package " + Utilities.encodingPackageRoot + "Common.FixedRecords;");
 		System.out.println();
 
 		CodeGeneratorJava.printCommonImports();
@@ -175,11 +175,11 @@ public class FixedRecordGenerator {
 						String[] parts = text.split(" ");
 						if (parts.length > 1) {
 							ledgerEntry.entryType = parts[0];
-							ledgerEntry.entryDataField = utils.convertToCamelCase(parts[1]);
+							ledgerEntry.entryDataField = pathBuilderUtilities.convertToCamelCase(parts[1]);
 						} else {
-							Utils utils = new Utils();
+							PathBuilderUtilities pathBuilderUtilities = new PathBuilderUtilities();
 							ledgerEntry.entryType = text;
-							ledgerEntry.entryDataField = utils.convertToCamelCase(text);
+							ledgerEntry.entryDataField = pathBuilderUtilities.convertToCamelCase(text);
 						}
 						break;
 
@@ -210,7 +210,7 @@ public class FixedRecordGenerator {
 			boolean nonBasicType = false;
 			
 			if (ledgerEntry.entryTID.equals("Basic")) {
-				ledgerEntry.entryType = utils.getPrimitiveFromEncodingType(ledgerEntry.entryType);
+				ledgerEntry.entryType = pathBuilderUtilities.getPrimitiveFromEncodingType(ledgerEntry.entryType);
 				nonBasicType = false;
 			} else if (ledgerEntry.entryTID.equals("Enumerated")) {
 				ledgerEntry.entryType = ledgerEntry.entryType;
@@ -233,10 +233,10 @@ public class FixedRecordGenerator {
 			// Setter implementation
 			System.out.println(indentFormat + "// Setter");
 			if (nonBasicType) {
-				System.out.println(indentFormat + "public void set" + utils.capitalizeFirstLetter(ledgerEntry.entryDataField) + "("
+				System.out.println(indentFormat + "public void set" + pathBuilderUtilities.capitalizeFirstLetter(ledgerEntry.entryDataField) + "("
 					+ ledgerEntry.entryType + "_Encode " + ledgerEntry.entryDataField + ") {");
 			} else {
-				System.out.println(indentFormat + "public void set" + utils.capitalizeFirstLetter(ledgerEntry.entryDataField) + "("
+				System.out.println(indentFormat + "public void set" + pathBuilderUtilities.capitalizeFirstLetter(ledgerEntry.entryDataField) + "("
 						+ ledgerEntry.entryType + " " + ledgerEntry.entryDataField + ") {");
 			}
 			depthIncSpace();
@@ -250,10 +250,10 @@ public class FixedRecordGenerator {
 			System.out.println(indentFormat + "// Getter");
 			if (nonBasicType) {
 				System.out.println(
-					indentFormat + "public " + ledgerEntry.entryType + "_Encode get" + utils.capitalizeFirstLetter(ledgerEntry.entryDataField)  + "() {");
+					indentFormat + "public " + ledgerEntry.entryType + "_Encode get" + pathBuilderUtilities.capitalizeFirstLetter(ledgerEntry.entryDataField)  + "() {");
 			} else {
 				System.out.println(
-					indentFormat + "public " + ledgerEntry.entryType + " get" + utils.capitalizeFirstLetter(ledgerEntry.entryDataField)  + "() {");
+					indentFormat + "public " + ledgerEntry.entryType + " get" + pathBuilderUtilities.capitalizeFirstLetter(ledgerEntry.entryDataField)  + "() {");
 			}
 			depthIncSpace();
 			System.out.println(indentFormat + "return " + ledgerEntry.entryDataField + ";");
@@ -316,11 +316,11 @@ public class FixedRecordGenerator {
 						String[] parts = text.split(" ");
 						if (parts.length > 1) {
 							ledgerEntry.entryType = parts[0];
-							ledgerEntry.entryDataField = utils.convertToCamelCase(parts[1]);
+							ledgerEntry.entryDataField = pathBuilderUtilities.convertToCamelCase(parts[1]);
 						} else {
-							Utils utils = new Utils();
+							PathBuilderUtilities pathBuilderUtilities = new PathBuilderUtilities();
 							ledgerEntry.entryType = text;
-							ledgerEntry.entryDataField = utils.convertToCamelCase(text);
+							ledgerEntry.entryDataField = pathBuilderUtilities.convertToCamelCase(text);
 						}
 						break;
 
@@ -352,7 +352,7 @@ public class FixedRecordGenerator {
 			String internalValue = null;
 			
 			if (ledgerEntry.entryTID.equals("Basic"))
-				classPrimitive = utils.getClassFromEncodingType(ledgerEntry.entryType);
+				classPrimitive = pathBuilderUtilities.getClassFromEncodingType(ledgerEntry.entryType);
 			else if (ledgerEntry.entryTID.equals("Enumerated")) {
 				
 				// Select all enumerated data types matching entryType
@@ -364,7 +364,7 @@ public class FixedRecordGenerator {
 		    	
 				for (DbEnumeratedDatatype var1 : list1) {
 
-					internalValue = utils.getClassFromEncodingType(utils.convertFromRPRType(var1.type));
+					internalValue = pathBuilderUtilities.getClassFromEncodingType(pathBuilderUtilities.convertFromRPRType(var1.type));
 				}
 		    	
 				classPrimitive = ledgerEntry.entryType;	
@@ -386,7 +386,7 @@ public class FixedRecordGenerator {
 				System.out.println(indentFormat + "buffer.put(utilities.getBytesFrom" + classPrimitive + "(" + ledgerEntry.entryDataField + "));");
 				System.out.println(indentFormat + "bufferOffset = buffer.position();");
 				
-				int fieldSize = utils.getNumberBytesFromEncodingType(ledgerEntry.entryType);
+				int fieldSize = pathBuilderUtilities.getNumberBytesFromEncodingType(ledgerEntry.entryType);
 				if (fieldSize > largestStructureMember)
 					largestStructureMember = fieldSize;
 				
@@ -456,10 +456,10 @@ public class FixedRecordGenerator {
 						String[] parts = text.split(" ");
 						if (parts.length > 1) {
 							ledgerEntry.entryType = parts[0];
-							ledgerEntry.entryDataField = utils.convertToCamelCase(parts[1]);
+							ledgerEntry.entryDataField = pathBuilderUtilities.convertToCamelCase(parts[1]);
 						} else {
 							ledgerEntry.entryType = text;
-							ledgerEntry.entryDataField = utils.convertToCamelCase(text);
+							ledgerEntry.entryDataField = pathBuilderUtilities.convertToCamelCase(text);
 						}
 						break;
 
@@ -491,7 +491,7 @@ public class FixedRecordGenerator {
 			String internalValue = null;
 			
 			if (ledgerEntry.entryTID.equals("Basic"))
-				classPrimitive = utils.getClassFromEncodingType(ledgerEntry.entryType);
+				classPrimitive = pathBuilderUtilities.getClassFromEncodingType(ledgerEntry.entryType);
 			else if (ledgerEntry.entryTID.equals("Enumerated")) {
 				
 				// Select all enumerated data types
@@ -503,7 +503,7 @@ public class FixedRecordGenerator {
 		    	
 				for (DbEnumeratedDatatype var1 : list1) {
 
-					internalValue = utils.getClassFromEncodingType(utils.convertFromRPRType(var1.type));
+					internalValue = pathBuilderUtilities.getClassFromEncodingType(pathBuilderUtilities.convertFromRPRType(var1.type));
 				}
 		    	
 				classPrimitive = ledgerEntry.entryType;	

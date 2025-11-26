@@ -27,7 +27,7 @@ import org.w3c.dom.NodeList;
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.CodeGeneratorJava;
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.LedgerEntry;
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.SharedResources.ElementType;
-import orbisoftware.hla_pathbuilder.Utils;
+import orbisoftware.hla_pathbuilder.PathBuilderUtilities;
 import orbisoftware.hla_shared.Utilities;
 
 // This array is of primitive type
@@ -35,7 +35,7 @@ public class FixedArrayType1Generator {
 
 	public static int indentSpace;
 	
-	private Utils utils = new Utils();
+	private PathBuilderUtilities pathBuilderUtilities = new PathBuilderUtilities();
 
 	private LedgerEntry ledgerEntry;
 
@@ -104,7 +104,7 @@ public class FixedArrayType1Generator {
 
 	public void printHeader(LedgerEntry value) {
 		
-		System.out.println("package " + Utilities.packageRoot + "Common.FixedArrays;");
+		System.out.println("package " + Utilities.encodingPackageRoot + "Common.FixedArrays;");
 
 		System.out.println();
 
@@ -115,8 +115,8 @@ public class FixedArrayType1Generator {
 		
 		depthIncSpace();
 		
-		String nativeClass = utils.getClassFromEncodingType(ledgerEntry.entryClassType);
-		String primitiveClass = utils.getPrimitiveFromEncodingType(ledgerEntry.entryClassType);
+		String nativeClass = pathBuilderUtilities.getClassFromEncodingType(ledgerEntry.entryClassType);
+		String primitiveClass = pathBuilderUtilities.getPrimitiveFromEncodingType(ledgerEntry.entryClassType);
 		
 		System.out.println();
 		System.out.println(indentFormat + "private " + nativeClass + "[] internalClassRepresentation = new " + 
@@ -158,8 +158,8 @@ public class FixedArrayType1Generator {
 		
 		System.out.println();
 		
-		String nativeClass = utils.getClassFromEncodingType(ledgerEntry.entryClassType);
-		String nativePrimitive = utils.getPrimitiveFromEncodingType(ledgerEntry.entryClassType);
+		String nativeClass = pathBuilderUtilities.getClassFromEncodingType(ledgerEntry.entryClassType);
+		String nativePrimitive = pathBuilderUtilities.getPrimitiveFromEncodingType(ledgerEntry.entryClassType);
 		
 		System.out.println(indentFormat + "// Setter");
 		System.out.println(indentFormat + "public void set" + nativeClass + "(int index, " +
@@ -195,7 +195,7 @@ public class FixedArrayType1Generator {
 		System.out.println();
 		depthIncSpace();
 		System.out.println(indentFormat +"int elementSize = " +
-				utils.getNumberBytesFromEncodingType(ledgerEntry.entryClassType) + ";");
+				pathBuilderUtilities.getNumberBytesFromEncodingType(ledgerEntry.entryClassType) + ";");
 		System.out.println();
 		System.out.println(indentFormat +"return elementSize;");
 		depthDecSpace();
@@ -205,7 +205,7 @@ public class FixedArrayType1Generator {
 	
 	public void processEncodeNode(LedgerEntry ledgerEntry) {
 		
-		String nativeClass = utils.getClassFromEncodingType(ledgerEntry.entryClassType);
+		String nativeClass = pathBuilderUtilities.getClassFromEncodingType(ledgerEntry.entryClassType);
 		
 		depthCurSpace();
 		System.out.println(indentFormat + 
@@ -225,7 +225,7 @@ public class FixedArrayType1Generator {
 	
 	public void processDecodeNode(LedgerEntry ledgerEntry) {
 		
-		String nativeClass = utils.getClassFromEncodingType(ledgerEntry.entryClassType);
+		String nativeClass = pathBuilderUtilities.getClassFromEncodingType(ledgerEntry.entryClassType);
 		
 		depthCurSpace();
 		System.out.println(indentFormat + 
@@ -263,7 +263,7 @@ public class FixedArrayType1Generator {
 		depthIncSpace();
 		
 		System.out.println(indentFormat + "int largestStructureMember = " +
-				utils.getNumberBytesFromEncodingType(ledgerEntry.entryClassType) + ";");
+				pathBuilderUtilities.getNumberBytesFromEncodingType(ledgerEntry.entryClassType) + ";");
 		System.out.println();
 		
 		System.out.println(indentFormat + "return largestStructureMember;");

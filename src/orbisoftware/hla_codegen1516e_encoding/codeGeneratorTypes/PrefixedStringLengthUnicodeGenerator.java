@@ -27,15 +27,12 @@ import org.w3c.dom.NodeList;
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.CodeGeneratorJava;
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.LedgerEntry;
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.SharedResources.ElementType;
-import orbisoftware.hla_pathbuilder.Utils;
 import orbisoftware.hla_shared.Utilities;
 
 // This array is of primitive type
 public class PrefixedStringLengthUnicodeGenerator {
 
 	public static int indentSpace;
-
-	private Utils utils = new Utils();
 
 	private LedgerEntry ledgerEntry;
 
@@ -106,7 +103,7 @@ public class PrefixedStringLengthUnicodeGenerator {
 		
 		String elementReference = "";
 		
-		System.out.println("package " + Utilities.packageRoot + "Common.PrefixedStringLength;");
+		System.out.println("package " + Utilities.encodingPackageRoot + "Common.PrefixedStringLength;");
 
 		System.out.println();
 

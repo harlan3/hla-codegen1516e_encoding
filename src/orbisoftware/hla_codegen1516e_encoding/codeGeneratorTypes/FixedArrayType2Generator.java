@@ -30,7 +30,7 @@ import org.w3c.dom.NodeList;
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.CodeGeneratorJava;
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.LedgerEntry;
 import orbisoftware.hla_codegen1516e_encoding.codeGenerator.SharedResources.ElementType;
-import orbisoftware.hla_pathbuilder.Utils;
+import orbisoftware.hla_pathbuilder.PathBuilderUtilities;
 import orbisoftware.hla_shared.Utilities;
 
 //This array is of non primitive type
@@ -38,7 +38,7 @@ public class FixedArrayType2Generator {
 
 	public static int indentSpace;
 
-	private Utils utils = new Utils();
+	private PathBuilderUtilities pathBuilderUtilities = new PathBuilderUtilities();
 
 	private LedgerEntry ledgerEntry;
 
@@ -113,7 +113,7 @@ public class FixedArrayType2Generator {
 
 	public void printHeader(LedgerEntry value) {
 
-		System.out.println("package " + Utilities.packageRoot + "Common.FixedArrays;");
+		System.out.println("package " + Utilities.encodingPackageRoot + "Common.FixedArrays;");
 
 		System.out.println();
 
@@ -164,7 +164,7 @@ public class FixedArrayType2Generator {
 		System.out.println();
 		
 		String nativeClass = ledgerEntry.entryClassType;
-		String variableName = utils.convertToCamelCase(nativeClass);
+		String variableName = pathBuilderUtilities.convertToCamelCase(nativeClass);
 		
 		System.out.println(indentFormat + "// Setter");
 		System.out.println(indentFormat + "public void set" + nativeClass + "_Encode(int index, " +
@@ -213,7 +213,7 @@ public class FixedArrayType2Generator {
 	
 	public void processEncodeNode(LedgerEntry ledgerEntry) {
 		
-		String nativeClass = utils.getClassFromEncodingType(ledgerEntry.entryClassType);
+		String nativeClass = pathBuilderUtilities.getClassFromEncodingType(ledgerEntry.entryClassType);
 		
 		depthCurSpace();
 		System.out.println(indentFormat + 
@@ -243,7 +243,7 @@ public class FixedArrayType2Generator {
 	
 	public void processDecodeNode(LedgerEntry ledgerEntry) {
 		
-		String nativeClass = utils.getClassFromEncodingType(ledgerEntry.entryClassType);
+		String nativeClass = pathBuilderUtilities.getClassFromEncodingType(ledgerEntry.entryClassType);
 		
 		depthCurSpace();
 		System.out.println(indentFormat + 
