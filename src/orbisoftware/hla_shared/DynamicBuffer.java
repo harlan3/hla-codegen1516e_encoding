@@ -31,10 +31,10 @@ public class DynamicBuffer {
 
             // Create a new buffer with the new capacity and copy existing data
             ByteBuffer newBuffer = ByteBuffer.allocate(newCapacity);
-            newBuffer.limit(newCapacity);
-            currentCapacity = newCapacity;
             buffer.flip(); // Switch from writing mode to reading mode
             newBuffer.put(buffer); // Copy old data into the new buffer
+            newBuffer.limit(newCapacity);
+            currentCapacity = newCapacity;
             
             // Assign new buffer
             buffer = newBuffer;
