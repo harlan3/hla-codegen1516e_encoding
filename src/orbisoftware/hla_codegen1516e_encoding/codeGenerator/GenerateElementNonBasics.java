@@ -114,6 +114,7 @@ public class GenerateElementNonBasics {
 			implementLengthlessArray(baseNode, elementType, elementName, value);
 			break;
 
+		case "NullTerminatedASCIIString":
 		case "RPRnullTerminatedArray":
 			implementNullTerminatedArray(baseNode, elementType, elementName, value);
 			break;

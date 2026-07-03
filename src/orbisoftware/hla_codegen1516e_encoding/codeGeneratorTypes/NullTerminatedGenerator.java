@@ -110,6 +110,7 @@ public class NullTerminatedGenerator {
 
 		CodeGeneratorJava.printCommonImports();
 		
+		System.out.println("import java.nio.charset.StandardCharsets;");
 		System.out.println("import java.util.Arrays;");
 		System.out.println();
 		
@@ -179,6 +180,23 @@ public class NullTerminatedGenerator {
 		System.out.println(indentFormat + "public byte[] getValue() {");
 		depthIncSpace();
 		System.out.println(indentFormat + "return value;");
+		depthDecSpace();
+		System.out.println(indentFormat + "}");
+		System.out.println();
+		
+		System.out.println(indentFormat + "// String Getter");
+		System.out.println(indentFormat + "public String getString() {");
+		System.out.println();
+		depthIncSpace();
+		System.out.println(indentFormat + "int length = 0;");
+		System.out.println();
+		System.out.println(indentFormat + "while (length < value.length && value[length] != 0) {");
+		depthIncSpace();
+		System.out.println(indentFormat + "length++;");
+		depthDecSpace();
+		System.out.println(indentFormat + "}");
+		System.out.println();
+		System.out.println(indentFormat + "return new String(value, 0, length, StandardCharsets.US_ASCII);");
 		depthDecSpace();
 		System.out.println(indentFormat + "}");
 		System.out.println();

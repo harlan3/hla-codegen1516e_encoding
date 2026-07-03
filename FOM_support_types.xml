@@ -17,6 +17,13 @@
                 <encoding></encoding>
             </basicData>
             <basicData>
+                <name>NullTerminatedASCIIString</name>
+                <size>Dynamic</size>
+                <interpretation></interpretation>
+                <endian>NA</endian>
+                <encoding></encoding>
+            </basicData>
+            <basicData>
                 <name>HLAunicodeChar</name>
                 <size>16</size>
                 <interpretation></interpretation>
