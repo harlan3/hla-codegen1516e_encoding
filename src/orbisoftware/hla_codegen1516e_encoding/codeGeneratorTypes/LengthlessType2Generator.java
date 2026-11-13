@@ -30,7 +30,7 @@ import orbisoftware.hla_codegen1516e_encoding.codeGenerator.SharedResources.Elem
 import orbisoftware.hla_pathbuilder.PathBuilderUtilities;
 import orbisoftware.hla_shared.Utilities;
 
-// This array is of primitive type
+// This array is of non primitive type
 public class LengthlessType2Generator {
 
 	public static int indentSpace;
