@@ -233,13 +233,19 @@ public class LengthlessType1Generator {
 
 		System.out.println(indentFormat + "int elementSize = " + primitiveClassSize + ";");
 		System.out.println(indentFormat + "byte[] elementBytes = new byte[elementSize];");
-		System.out.println(indentFormat + "int numElements = sizeHint;");
+		System.out.println(indentFormat + "int numElements = buffer.getRemainingBytes() / elementSize;");
+		System.out.println();
+		System.out.println(indentFormat + "if (numElements == 0)");
+		depthIncSpace();
+		System.out.println(indentFormat + "numElements = sizeHint;");
+		depthDecSpace();
 		System.out.println();
 		System.out.println(indentFormat + "internalClassRepresentation.clear();");
 		System.out.println();
 		System.out.println(indentFormat + "for (int i=0; i < numElements; i++) {");
 		System.out.println();
 		depthIncSpace();
+		System.out.println(indentFormat + "buffer.position(i * elementSize);");
 		System.out.println(indentFormat + "buffer.get(elementBytes);");
 		System.out.println(indentFormat + "internalClassRepresentation.add(utilities.get" + primitiveClass + "FromBytes(elementBytes));");
 		depthDecSpace();

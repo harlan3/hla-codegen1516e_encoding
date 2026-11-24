@@ -489,7 +489,7 @@ public class CodeGeneratorJava {
 				System.out.println(indentFormat + "private void " + dataFieldName + "Decode() {" );
 				System.out.println();
 				depthIncSpace();
-				System.out.println(indentFormat + "DynamicBuffer dynamicBuffer = new DynamicBuffer();");
+				System.out.println(indentFormat + "DynamicBuffer dynamicBuffer = new DynamicBuffer(((byte []) currentMapEntry.getValue()).length);");
 				System.out.println(indentFormat + "dynamicBuffer.clear();");
 				System.out.println(indentFormat + "dynamicBuffer.put((byte []) currentMapEntry.getValue());");
 				System.out.println(indentFormat + "dynamicBuffer.flip();");

@@ -243,7 +243,7 @@ public class LengthlessType2Generator {
 		System.out.println(indentFormat + "int elementSize = getElementSize(alignment);");
 		System.out.println(indentFormat + "DynamicBuffer tmpBuffer = new DynamicBuffer();");
 		System.out.println(indentFormat + "byte[] elementBytes = new byte[elementSize];");
-		System.out.println(indentFormat + "int numElements = buffer.getWrittenBytes().length / elementSize;");
+		System.out.println(indentFormat + "int numElements = buffer.getRemainingBytes() / elementSize;");
 		System.out.println();
 		System.out.println(indentFormat + "if (numElements == 0)");
 		depthIncSpace();
